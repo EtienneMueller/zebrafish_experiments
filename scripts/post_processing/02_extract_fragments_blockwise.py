@@ -44,24 +44,19 @@ def extract_fragments(
         affs_dataset,
 
         block_size (``tuple`` of ``int``):
-
             The size of one block in world units.
 
         context (``tuple`` of ``int``):
-
             The context to consider for fragment extraction and agglomeration,
             in world units.
 
         db_host (``string``):
-
             Where to find the MongoDB server.
 
         db_name (``string``):
-
             The name of the MongoDB database to use.
 
         num_workers (``int``):
-
             How many blocks to run in parallel.
     """
 

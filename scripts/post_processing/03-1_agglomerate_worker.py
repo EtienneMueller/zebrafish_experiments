@@ -1,14 +1,14 @@
-from funlib.persistence import graphs
-
 import daisy
+import json
 import logging
 import lsd.post
-import json
-import sys
 import pymongo
+import sys
 import time
 
+from funlib.persistence import graphs
 from funlib.persistence import open_ds
+
 
 logging.basicConfig(level=logging.INFO)
 

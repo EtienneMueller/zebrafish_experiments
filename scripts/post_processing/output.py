@@ -1,5 +1,4 @@
 import click
-
 import logging
 
 
@@ -22,15 +21,16 @@ def cli(log_level):
 @click.option("-o", "--output", type=str)
 @click.option("-n", "--num-threads", type=int, default=1)
 def relabel(container, frags, lut, output, num_threads):
+    import daisy
+    import numpy as np
+    import zarr
+
     from funlib.segment.arrays import replace_values
     from funlib.persistence import open_ds, prepare_ds
     from funlib.geometry import Roi
-    import daisy
-
-    import zarr
-    import numpy as np
-
+    
     from pathlib import Path
+
 
     frag_ds = open_ds(container, frags, mode="r")
     segs_ds = prepare_ds(
@@ -84,14 +84,15 @@ def size_filter(
     num_threads,
     context,
 ):
+    import daisy
+    import numpy as np
+    import zarr
+
     from funlib.segment.arrays import replace_values
     from funlib.persistence import open_ds, prepare_ds, Array
     from funlib.geometry import Roi, Coordinate
-    import daisy
-
-    import zarr
-    import numpy as np
-
+    
+    
     frag_ds = open_ds(container, dataset, mode="r")
     filtered_ds = prepare_ds(
         output_container,

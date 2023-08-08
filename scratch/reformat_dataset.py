@@ -10,7 +10,7 @@ import csv
 # format for training. Requires a significant amount of RAM to Run
 
 # Load yamls
-yaml_root_dir = Path("configs/yamls/zebrafish")
+yaml_root_dir = Path("../configs/yamls/zebrafish")
 assert yaml_root_dir.exists(), f"{yaml_root_dir} does not exist!"
 
 # constants
@@ -259,7 +259,8 @@ UPDATE_MASKS = True
 GENERATE_POINTS = True
 
 condition = lambda sample, organelle, annotation_type: (
-    organelle == "cells" and sample == "23_mid1"
+    # organelle == "cells" and sample == "23_mid1"
+    organelle == "cells" and sample == "16_bot"
 )
 
 if RELABEL:

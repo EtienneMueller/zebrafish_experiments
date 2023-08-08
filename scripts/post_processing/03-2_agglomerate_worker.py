@@ -1,19 +1,18 @@
+import daisy
+import itertools
+import json
+import logging
+import numpy as np
+import pymongo
+import sys
+import time
+
 from funlib.segment.arrays import relabel
 from funlib.persistence import graphs
+from funlib.persistence import open_ds
 
-import daisy
-
-import numpy as np
 from scipy.ndimage import measurements
 
-import logging
-import json
-import sys
-import pymongo
-import time
-import itertools
-
-from funlib.persistence import open_ds
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

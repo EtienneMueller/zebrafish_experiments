@@ -1,11 +1,11 @@
-import json
+import daisy
 import hashlib
+import json
 import logging
 import os
-import daisy
-import time
-import subprocess
 import pymongo
+import subprocess
+import time
 
 from funlib.persistence import open_ds
 from funlib.geometry import Coordinate
@@ -32,38 +32,29 @@ def agglomerate(
         predicted before.
 
         Args:
-
             in_file (``string``):
-
                 The input file containing affs and fragments.
 
             affs_dataset, fragments_dataset (``string``):
-
                 Where to find the affinities and fragments.
 
             block_size (``tuple`` of ``int``):
-
                 The size of one block in world units.
 
             context (``tuple`` of ``int``):
-
                 The context to consider for fragment extraction and agglomeration,
                 in world units.
 
             db_host (``string``):
-
                 Where to find the MongoDB server.
 
             db_name (``string``):
-
                 The name of the MongoDB database to use.
     open_ds(
             num_workers (``int``):
-
                 How many blocks to run in parallel.
 
             merge_function (``string``):
-
                 Symbolic name of a merge function. See dictionary below.
     """
 

@@ -1,14 +1,15 @@
-from gunpowder import *
-from gunpowder.tensorflow import *
-
-from funlib.geometry import Coordinate
-
 import json
 import logging
 import numpy as np
 import os
-import sys
 import pymongo
+import sys
+
+from funlib.geometry import Coordinate
+
+from gunpowder import *
+from gunpowder.tensorflow import *
+
 
 setup_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -105,7 +106,7 @@ def predict(
         chunk_request,
         roi_map={raw: "read_roi", affs: "write_roi", lsds: "write_roi"},
         num_workers=worker_config["num_cache_workers"],
-        block_done_callback=lambda b, s, d: block_done_callback(
+        block_done_callback = lambda b, s, d: block_done_callback(
             db_host, db_name, worker_config, b, s, d
         ),
     )

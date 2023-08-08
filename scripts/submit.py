@@ -14,7 +14,7 @@ import itertools
 
 
 constants = yaml.safe_load(
-    Path("configs/yamls/zebrafish/constants.yaml").open("r").read()
+    Path("../configs/yamls/zebrafish/constants.yaml").open("r").read()
 )
 
 

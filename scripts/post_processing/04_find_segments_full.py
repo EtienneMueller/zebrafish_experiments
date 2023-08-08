@@ -1,11 +1,13 @@
 import daisy
-from funlib.persistence import graphs
 import logging
-import time
-import os
 import numpy as np
+import os
+import time
+
 from funlib.segment.graphs.impl import connected_components
+from funlib.persistence import graphs
 from funlib.persistence import open_ds
+
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("funlib..persistence.graphs.shared_graph_provider").setLevel(
@@ -24,44 +26,34 @@ def find_segments(
     sample_name,
 ):
     """
-
     Args:
 
         db_host (``string``):
-
             Where to find the MongoDB server.
 
         db_name (``string``):
-
             The name of the MongoDB database to use.
 
         fragments_file (``string``):
-
             Path to the file containing the fragments.
 
         edges_collection (``string``):
-
             The name of the MongoDB database collection to use.
 
         thresholds_minmax (``list`` of ``int``):
-
             The lower and upper bound to use (i.e [0,1]) when generating
             thresholds.
 
         thresholds_step (``float``):
-
             The step size to use when generating thresholds between min/max.
 
         roi_offset (array-like of ``int``):
-
             The starting point (inclusive) of the ROI. Entries can be ``None``
             to indicate unboundedness.
 
         roi_shape (array-like of ``int``):
-
             The shape of the ROI. Entries can be ``None`` to indicate
             unboundedness.
-
     """
 
     scale = False

@@ -1,25 +1,20 @@
 import daisy
-import logging
 import json
-import sys
+import logging
+import mahotas
+import numpy as np
 import pymongo
+import sys
 import time
+import waterz
 
 from funlib.segment.arrays import relabel, replace_values
 from funlib.geometry import Coordinate
 from funlib.persistence import open_ds, Array, graphs
 from scipy.ndimage import measurements
-import daisy
-import logging
-import numpy as np
-import waterz
-
-import mahotas
-import numpy as np
-import logging
-import waterz
 from scipy.ndimage.morphology import distance_transform_edt
 from scipy.ndimage.filters import gaussian_filter, maximum_filter
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
