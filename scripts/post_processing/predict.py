@@ -11,6 +11,18 @@ from gunpowder import *
 from gunpowder.tensorflow import *
 
 
+"""
+Script heavily relies on gunpowder (https://github.com/funkelab/gunpowder):
+A library to facilitate machine learning on large, multi-dimensional images.
+Gunpowder allows you to assemble a pipeline from data loading over 
+pre-processing, random batch sampling, data augmentation, pre-caching, 
+training/prediction, to storage of results on arbitrarily large volumes of 
+multi-dimensional images. 
+
+The full documentation can be found here: https://funkelab.github.io/gunpowder
+"""
+
+
 setup_dir = os.path.dirname(os.path.realpath(__file__))
 
 with open(os.path.join(setup_dir, "config.json"), "r") as f:
@@ -62,6 +74,8 @@ def predict(
     **kwargs
 ):
 
+    # ArrayKey (gunpowder)
+    # A key to identify arrays in requests, batches, and across nodes
     raw = ArrayKey("RAW")
     lsds = ArrayKey("LSDS")
     affs = ArrayKey("AFFS")
@@ -71,14 +85,20 @@ def predict(
     chunk_request.add(lsds, output_size)
     chunk_request.add(affs, output_size)
 
+    # ZarrSource (gunpowder)
+    # Provides arrays from zarr datasets
     pipeline = ZarrSource(
         raw_file,
         datasets={raw: raw_dataset},
         array_specs={
+            # Arrayspec (gunpowder): Contains meta-information about an array. 
             raw: ArraySpec(interpolatable=True),
         },
     )
 
+    # Pad (gunpowder)
+    # Add a constant intensity padding around arrays of another batch provider. 
+    # This is useful if your requested batches can be larger than what your source provides.
     pipeline += Pad(raw, size=None)
 
     pipeline += Normalize(raw)

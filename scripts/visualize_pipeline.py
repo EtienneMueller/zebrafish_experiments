@@ -1,5 +1,4 @@
 import click
-
 import logging
 
 
@@ -18,15 +17,15 @@ def cli(log_level):
 @cli.command()
 @click.option("-r", "--run-config", type=str)
 def visualize_pipeline(run_config):
+    import gunpowder as gp
+    import neuroglancer
+    import numpy as np
+
     from dacapo.experiments import Run
     from dacapo.store import create_config_store, create_array_store
 
     from funlib.geometry import Coordinate
-    import gunpowder as gp
-
-    import neuroglancer
-
-    import numpy as np
+    
 
     config_store = create_config_store()
     config = config_store.retrieve_run_config(run_config)

@@ -1,16 +1,16 @@
+import click
+import itertools
+import logging
+import subprocess
+import yaml
+
 from dacapo.store.create_store import create_config_store
 from dacapo.experiments.run_config import RunConfig
 
 from funlib.geometry import Coordinate
 
-import click
-
-import logging
 from pathlib import Path
-import yaml
-import subprocess
 from pprint import pprint
-import itertools
 
 
 constants = yaml.safe_load(

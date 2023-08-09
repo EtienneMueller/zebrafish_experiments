@@ -1,14 +1,14 @@
-from dacapo.store.create_store import create_config_store
-from dacapo.experiments import Run
-
-import daisy
-
 import click
+import daisy
+import logging
 import numpy as np
-
 import subprocess
 import sys
-import logging
+
+import funlib.persistence
+
+from dacapo.store.create_store import create_config_store
+from dacapo.experiments import Run
 
 
 @click.group()
@@ -139,7 +139,8 @@ def predict(
     if not local:
         assert billing is not None
 
-    raw = daisy.open_ds(in_container, in_dataset)
+    #raw = daisy.open_ds(in_container, in_dataset)
+    raw = funlib.persistence.open_ds(in_container, in_dataset)
 
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(name)
