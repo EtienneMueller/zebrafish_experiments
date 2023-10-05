@@ -78,10 +78,14 @@ def update(force):
             )
         else:
             gt_config = OnesArrayConfig(
-                f"zebrafish_gt_full_{sample}_{organelle}", mask_config
+                f"zebrafish_gt_full_{sample}_{organelle}",
+                mask_config
             )
             gt_config = IntensitiesArrayConfig(
-                f"zebrafish_gt_empty_{sample}_{organelle}", gt_config, 1, 2
+                f"zebrafish_gt_empty_{sample}_{organelle}",
+                gt_config,
+                1,
+                2
             )
         points_path = Path(
             constants["dataset_container"],

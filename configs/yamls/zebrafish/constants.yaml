@@ -1,14 +1,14 @@
 # default paths to check for data
-input_container: /home/etienne/Workspace/zebrafish-experiments/data/s16_bottom_110nm_rec_.n5
-id_annotations_path: /home/etienne/Workspace/zebrafish-experiments/data/{organelle}-{sample}-{annotation_type}.txt
-#dataset_container: /home/etienne/Workspace/zebrafish-experiments/data/s16_bottom_110nm_rec_2.n5
-data_group: "/home/etienne/Workspace/zebrafish-experiments/data/volumes/{sample}"
-raw_dataset: "/home/etienne/Workspace/zebrafish-experiments/data/volumes/{sample}/raw"
-gt_dataset: "/home/etienne/Workspace/zebrafish-experiments/data/volumes/{sample}/{organelle}"
-mask_dataset: "/home/etienne/Workspace/zebrafish-experiments/data/volumes/{sample}/{organelle}_mask"
-points_dataset: "/home/etienne/Workspace/zebrafish-experiments/data/volumes/{sample}/{organelle}_points"
-prediction_container: "/home/etienne/Workspace/zebrafish-experiments/data/predictions/zebrafish/zebrafish.n5"
-sample_path: "/home/etienne/Workspace/zebrafish-experiments/data/adjavond/zebrafish/data"
+input_container: /home/etienne/Workspace/data/s16_bottom_110nm_rec_.n5
+id_annotations_path: /home/etienne/Workspace/data/{organelle}-{sample}-{annotation_type}.txt
+dataset_container: /home/etienne/Workspace/data/zebrafish.n5
+data_group: "volumes/{sample}"
+raw_dataset: "volumes/{sample}/raw"
+gt_dataset: "volumes/{sample}/{organelle}"
+mask_dataset: "volumes/{sample}/{organelle}_mask"
+points_dataset: "volumes/{sample}/{organelle}_points"
+prediction_container: "/home/etienne/Workspace/predictions/zebrafish/zebrafish.n5"
+sample_path: "/home/etienne/Workspace/adjavond/zebrafish/data"
 
 data_problems:
     17-2:

@@ -1,15 +1,16 @@
-import json
+import daisy
 import hashlib
+import json
 import logging
 import numpy as np
 import os
-import daisy
 import pymongo
-import time
 import subprocess
+import time
 
 from funlib.persistence import open_ds, prepare_ds
 from funlib.geometry import Coordinate
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -249,7 +250,7 @@ if __name__ == "__main__":
         fragments_dataset="predictions/2023-05-09/s17/cells_finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v3__1__60000_fragments",
         block_size=tuple(block_size),
         context=tuple(context),
-        db_host="mongodb://microdosingAdmin:Cu2CO3OH2@funke-mongodb2.int.janelia.org:27017",
+        db_host="mongodb://localhost:27017/",
         db_name="dacapo_zebrafish",
         num_workers=64,
         fragments_in_xy=False,

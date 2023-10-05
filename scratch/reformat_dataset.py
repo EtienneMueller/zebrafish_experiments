@@ -1,10 +1,10 @@
+import csv
+import itertools
+import numpy as np
 import yaml
 import zarr
-import numpy as np
-
 from pathlib import Path
-import itertools
-import csv
+
 
 # Script for converting the various training data into a consistent
 # format for training. Requires a significant amount of RAM to Run
@@ -226,15 +226,12 @@ def merge_masks(organelle_a: str, organelle_b: str, sample: str):
     b_masks = ([in_mask_b] if in_mask_b is not None else []) + (
         [in_gt_a] if in_gt_a is not None else []
     )
-    in_mask_a = np.stack(a_masks).max(axis=0)
-    in_mask_b = np.stack(b_masks).max(axis=0)
-
-    out_container[
-        constants["mask_dataset"].format(sample=sample, organelle=organelle_a)
-    ] = in_mask_a.astype(np.uint64)
-    out_container[
-        constants["mask_dataset"].format(sample=sample, organelle=organelle_b)
-    ] = in_mask_b.astype(np.uint64)
+    if in_mask_a is not None:
+        in_mask_a = np.stack(a_masks).max(axis=0)
+        out_container[constants["mask_dataset"].format(sample=sample, organelle=organelle_a)] = in_mask_a.astype(np.uint64)
+    if in_mask_b is not None:
+        in_mask_b = np.stack(b_masks).max(axis=0)
+        out_container[constants["mask_dataset"].format(sample=sample, organelle=organelle_b)] = in_mask_b.astype(np.uint64)
 
 
 def generate_points(sample: str, organelle: str):
@@ -254,13 +251,14 @@ def generate_points(sample: str, organelle: str):
 
 RELABEL = True
 MERGE_MASKS = True
-COPY_DATA = True
-UPDATE_MASKS = True
+COPY_DATA = False
+UPDATE_MASKS = False
 GENERATE_POINTS = True
 
 condition = lambda sample, organelle, annotation_type: (
-    # organelle == "cells" and sample == "23_mid1"
-    organelle == "cells" and sample == "16_bot"
+    #organelle == "cells" and sample == "23_mid1"
+    organelle == "vessel" and sample == "23_bot"
+    #organelle == "cells" and sample == "16_bot"
 )
 
 if RELABEL:
@@ -285,6 +283,9 @@ if MERGE_MASKS:
 
 if COPY_DATA:
     for organelle in targets:
+        print(datasets["train"])
+        print(datasets["validate"])
+        print(list(itertools.chain(datasets["train"], datasets["validate"])))
         for crop, index in itertools.chain(datasets["train"], datasets["validate"]):
             if not condition(None, organelle, None):
                 continue

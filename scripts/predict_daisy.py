@@ -111,13 +111,7 @@ def spawn_worker(
 @click.option("-ic", "--in_container", type=click.Path(exists=True, file_okay=False))
 @click.option("-id", "--in_dataset", type=str)
 @click.option("-w", "--workers", type=int, default=1)
-@click.option(
-    "-roi",
-    "--roi",
-    type=str,
-    required=False,
-    help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
-)
+@click.option("-roi", "--roi", type=str, required=False, help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",)
 @click.option("--local/--bsub", default=True)
 @click.option("--billing", default=None)
 @click.option("--min-raw", type=float, default=0)

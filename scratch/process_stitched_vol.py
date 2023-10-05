@@ -9,21 +9,27 @@ from pathlib import Path
 # Script for turning a raw file into a zarr dataset
 
 path = Path(
-    #"/nrs/funke/pattonw/data/zebrafish/stitched/top_left_right_bottom_resliced_8555x5155x4419.raw"
-    "/home/etienne/Workspace/zebrafish-experiments/data/top_left_right_bottom_resliced_8555x5155x4419.raw"
+    #"/nrs/funke/pattonw/data/zebrafish/stitched/top_left_right_bottom_resliced_8555x5155x4419.raw"  # s17
+    #"/home/etienne/Workspace/zebrafish-experiments/data/top_left_right_bottom_resliced_8555x5155x4419.raw"
+    "/home/etienne/Workspace/zebrafish-experiments/data/sample8_ear_eye_bottom_402.0_-843.0_19858.0_rotated_6230x3457x4130.raw"
 )
 container = zarr.open(
     #"/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5", mode="r+"
     "/home/etienne/Workspace/zebrafish-experiments/data/s16_bottom_110nm_rec_.n5", mode="r+"
 )
 output_data = container.create_dataset(
-    "/home/etienne/Workspace/zebrafish-experiments/volumes/s17/raw", dtype=np.uint8, overwrite=True, shape=(8555, 5155, 4419)
+    #"/volumes2/s17/raw", dtype=np.uint8, overwrite=True, shape=(8555, 5155, 4419)
+    "/volumes2/s17/raw", dtype=np.uint8, overwrite=True, shape=(6230, 3457, 4130)
 )
 
-n_z = 8555
-size_y = 5155
-size_x = 4419
-size_z = 8555
+#n_z = 8555
+#size_y = 5155
+#size_x = 4419
+#size_z = 8555
+n_z = 6230
+size_y = 3457
+size_x = 4130
+size_z = 6230
 count = size_x * size_y
 start_z = 0
 end_z = size_z
