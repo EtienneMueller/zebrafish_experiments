@@ -30,12 +30,56 @@ def cli(log_level):
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
+# !!!
+# HAS TO BE ADAPTED FOR SLURM!!!
+# !!!
 @cli.command()
 @click.option("-r", "--run", type=click.Path(exists=True, dir_okay=False))
 @click.option("-b", "--billing", type=str)
 @click.option("-q", "--queue", type=str)
 @click.option("-n", "--num-cpus", type=int)
 def run(run, billing, queue, num_cpus):
+    run_file = Path(run)
+    group_name = run_file.parent.name
+    run_names = yaml.safe_load(Path(run).open("r").read())
+    print(run_names)
+    for run_name in run_names:
+        log_dir = Path(f"runs/{run_name}/logs")
+        log_dir.mkdir(exist_ok=True, parents=True)
+
+        command = [
+            "bsub",
+            "-P",
+            billing,
+            "-We",
+            "72:00",
+            "-J",
+            group_name,
+            "-q",
+            queue,
+            "-n",
+            f"{num_cpus}",
+            "-gpu",
+            "num=1",
+            "-o",
+            f"runs/{run_name}/logs/1.out",
+            "-e",
+            f"runs/{run_name}/logs/1.err",
+            "dacapo",
+            "train",
+            "-r",
+            run_name,
+        ]
+
+        subprocess.run(command)
+
+
+@cli.command()
+@click.option("-r", "--run", type=click.Path(exists=True, dir_okay=False))
+@click.option("-b", "--billing", type=str)
+@click.option("-q", "--queue", type=str)
+@click.option("-n", "--num-cpus", type=int)
+def run_bsub(run, billing, queue, num_cpus):
     run_file = Path(run)
     group_name = run_file.parent.name
     run_names = yaml.safe_load(Path(run).open("r").read())

@@ -1,15 +1,40 @@
 # default paths to check for data
-input_container: /home/etienne/Workspace/data/s16_bottom_110nm_rec_.n5
-id_annotations_path: /home/etienne/Workspace/data/{organelle}-{sample}-{annotation_type}.txt
-dataset_container: /home/etienne/Workspace/data/zebrafish.n5
-data_group: "volumes/{sample}"
-raw_dataset: "volumes/{sample}/raw"
-gt_dataset: "volumes/{sample}/{organelle}"
-mask_dataset: "volumes/{sample}/{organelle}_mask"
-points_dataset: "volumes/{sample}/{organelle}_points"
-prediction_container: "/home/etienne/Workspace/predictions/zebrafish/zebrafish.n5"
-sample_path: "/home/etienne/Workspace/adjavond/zebrafish/data"
+# used in reformat_dataset
+input_container: /data/projects/punim2142/zebrafish_experiments/data/michelle_zebrafish/zebrafish.n5
+# /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/zebrafish.n5
 
+# used in reformat_dataset
+id_annotations_path: /data/projects/punim2142/zebrafish_experiments/data/michelle_zebrafish/id_annotations/{organelle}-{sample}-{annotation_type}.txt
+# /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/id_annotations/{organelle}-{sample}-{annotation_type}.txt
+
+# used in reformat_dataset, submit
+dataset_container: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+# /nrs/funke/pattonw/data/zebrafish/zebrafish.n5
+
+# not used
+#data_group: "volumes/{sample}"
+
+# used in datasets, predict_worker, predict, reformat_dataset (copy_data, relabel)
+raw_dataset: "volumes/{sample}/raw"
+
+# used in configs/scripts/datasplits/datasets.py, reformat_dataset (copy_data, update_masks, relabel, merge_masks)
+gt_dataset: "volumes/{sample}/{organelle}"
+
+# used in dataset, 02_extract_fragments_*, reformat_dataset (all 5)
+mask_dataset: "volumes/{sample}/{organelle}_mask"
+
+# used in datasets.py and reformat_dataset.py (generate_points)
+points_dataset: "volumes/{sample}/{organelle}_points"
+
+# only used in submit.py
+prediction_container: "/data/projects/punim2142/zebrafish_experiments/data/predictions/zebrafish.n5"
+# "/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5"
+
+# not used
+# sample_path: "/data/projects/punim2142/zebrafish_experiments/data/zebrafish/data"
+# "/nrs/funke/adjavond/zebrafish/data"
+
+# used in reformat_dataset (copy_data)
 data_problems:
     17-2:
         cells:

@@ -1,39 +1,45 @@
-import rawpy
-import imageio
+#import imageio
 import numpy as np
-from tqdm import tqdm
+#import rawpy
 import zarr
 
 from pathlib import Path
+from tqdm import tqdm
 
-# Script for turning a raw file into a zarr dataset
+
+"""
+Script for turning a raw file into a zarr dataset
+(Needed around 20 minutes and 182 GB of RAM (=filesize) on HPC for S17)
+"""
 
 path = Path(
-    #"/nrs/funke/pattonw/data/zebrafish/stitched/top_left_right_bottom_resliced_8555x5155x4419.raw"  # s17
-    #"/home/etienne/Workspace/zebrafish-experiments/data/top_left_right_bottom_resliced_8555x5155x4419.raw"
-    "/home/etienne/Workspace/zebrafish-experiments/data/sample8_ear_eye_bottom_402.0_-843.0_19858.0_rotated_6230x3457x4130.raw"
-)
-container = zarr.open(
-    #"/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5", mode="r+"
-    "/home/etienne/Workspace/zebrafish-experiments/data/s16_bottom_110nm_rec_.n5", mode="r+"
-)
-output_data = container.create_dataset(
-    #"/volumes2/s17/raw", dtype=np.uint8, overwrite=True, shape=(8555, 5155, 4419)
-    "/volumes2/s17/raw", dtype=np.uint8, overwrite=True, shape=(6230, 3457, 4130)
+    #"/nrs/funke/pattonw/data/zebrafish/stitched/top_left_right_bottom_resliced_8555x5155x4419.raw"
+    "/data/projects/punim2142/etienne/data/top_left_right_bottom_resliced_8555x5155x4419.raw"  
+    #Sample17_top_left_right_bottom_0.0_0.0_0.0_4419x5155x8555_rotated_8555x5155x4419
 )
 
-#n_z = 8555
-#size_y = 5155
-#size_x = 4419
-#size_z = 8555
-n_z = 6230
-size_y = 3457
-size_x = 4130
-size_z = 6230
+# WILLS LINK IS dataset_container (OUTPUT) IN THE CONSTANTS.YAML
+# ‘r’  read only (must exist); ‘r+’ read/write (must exist);
+# ‘a’  read/write (create if doesn’t exist);
+# ‘w’  create (overwrite if exists); ‘w-’ create (fail if exists).
+container = zarr.open(
+    #"/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5", mode="r+"
+    "/data/projects/punim2142/etienne/data/zebrafish_out.n5", mode="a"
+)
+output_data = container.create_dataset(
+    "/volumes/s17/raw", dtype=np.uint8, overwrite=True, shape=(8555, 5155, 4419)
+)
+
+size_x = 4419
+size_y = 5155
+size_z = 8555
+
+n_z = 8555
 count = size_x * size_y
 start_z = 0
 end_z = size_z
 n_bytes = 1  # Number of bytes in a uint8 (for offset)
+
 fd = open(path, "rb")
 fd.seek(start_z)
 

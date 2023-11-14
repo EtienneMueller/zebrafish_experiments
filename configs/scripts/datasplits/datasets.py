@@ -43,6 +43,7 @@ def update(force):
     constants = yaml.safe_load(constants_yaml.open("r").read())
 
     # targets. What classes we need to preprocess the data into
+    # (here: vessel, axons, cells)
     target_yaml = yaml_root_dir / "targets.yaml"
     targets = yaml.safe_load(target_yaml.open("r").read())
 

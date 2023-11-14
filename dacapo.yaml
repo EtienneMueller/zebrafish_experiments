@@ -1,4 +1,4 @@
-mongo_db_host: mongodb://localhost:27017/
+mongo_db_host: mongodb://172.26.132.124:27017
 mongo_db_name: dacapo_zebrafish
-runs_base_dir: "/home/etienne/Workspace/zebrafish-experiments/data/"
+runs_base_dir: "/data/projects/punim2142/zebrafish_experiments"
 #file_server: "http://funkelab-ws1:3000"

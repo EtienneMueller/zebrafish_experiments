@@ -64,9 +64,10 @@ Example config files can be found in `configs/zebrafish/predictions`.
 
 ### postprocessing
 Postprocessing scripts can be found in `scripts/post_processing`. There are a couple versions for post processing workers. Post processing is broken down into 3 steps.
-2) generate fragments (2: mwatershed or 1: waterz)
-    - using 2 tends to do better but is slower and can generate many small fragments that slow down later processing
-3) agglomerate fragments (2: mwatershed or 1: waterz)
-    - using 2 utilizes long range affinities as well as short range affinities to generate more edges. Tends to do significantly better on datasets where false merges occur.
-4) lut generation (2: mwatershed or 1: waterz)
-    - 1 uses only positive edges to agglomerate and can be prone to agglomerating entire volumes into a single id. 2 uses mwatershed to run mutex watershed with negative edges and performs significantly better in cases where merge errors are an issue.
+
+2. generate fragments (2: mwatershed or 1: waterz)
+	- using 2 tends to do better but is slower and can generate many small fragments that slow down later processing
+3. agglomerate fragments (2: mwatershed or 1: waterz)
+	- using 2 utilizes long range affinities as well as short range affinities to generate more edges. Tends to do significantly better on datasets where false merges occur.
+4. lut generation (2: mwatershed or 1: waterz)
+	- 1 uses only positive edges to agglomerate and can be prone to agglomerating entire volumes into a single id. 2 uses mwatershed to run mutex watershed with negative edges and performs significantly better in cases where merge errors are an issue.

@@ -2,9 +2,13 @@ axons:
   23_bot:
     - bad
     - negative
-    - segments
+    #- segments
 cells:
   16_bot:
+    - bad
+    - negative
+    - good
+  23_bot:
     - bad
     - negative
     - good
