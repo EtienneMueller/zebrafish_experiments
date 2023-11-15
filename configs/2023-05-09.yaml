@@ -1,12 +1,12 @@
 name: 2023-05-09
-billing: funke
+billing: ethan
 predictions:
   - outputs:
       - cells
     datasets:
-      - name: s17
-        container: /nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5
-        array: volumes/s17/raw
+      - name: 17-2
+        container: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+        array: volumes/17-2/raw
     setups:
       - name: finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v3__1
         target: cells

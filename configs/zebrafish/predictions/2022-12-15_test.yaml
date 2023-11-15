@@ -1,0 +1,14 @@
+name: 2022-12-15
+billing: ethan
+predictions:
+  - outputs:
+      - cells
+    datasets:
+      - name: 16
+        container: /data/projects/punim2142/zebrafish_experiments/data/s16_bottom_110nm_rec_.n5
+        array: raw
+    setups:
+      - name: finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default__1
+        target: cells
+    criteria:
+      - "40000"
