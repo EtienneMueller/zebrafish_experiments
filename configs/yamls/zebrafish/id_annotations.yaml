@@ -12,10 +12,10 @@ cells:
     - bad
     - negative
     - good
-  23_mid1:
-    - bad
-    - negative
-    - good
+  #23_mid1:
+  #  - bad
+  #  - negative
+  #  - good
 vessel:
   23_bot:
     - negative

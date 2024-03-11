@@ -8,13 +8,17 @@ from tqdm import tqdm
 
 
 """
-Script for turning a raw file into a zarr dataset
+Script for turning a raw file into a zarr dataset.
+Will generate a zebrafish_out.n5 folder containing the subfolders
+/volumes/s17/raw/.
+reformat_dataset has to be run next.
+
 (Needed around 20 minutes and 182 GB of RAM (=filesize) on HPC for S17)
 """
 
 path = Path(
     #"/nrs/funke/pattonw/data/zebrafish/stitched/top_left_right_bottom_resliced_8555x5155x4419.raw"
-    "/data/projects/punim2142/etienne/data/top_left_right_bottom_resliced_8555x5155x4419.raw"  
+    "/data/projects/punim2142/zebrafish_experiments/data/top_left_right_bottom_resliced_8555x5155x4419.raw"  
     #Sample17_top_left_right_bottom_0.0_0.0_0.0_4419x5155x8555_rotated_8555x5155x4419
 )
 
@@ -24,7 +28,7 @@ path = Path(
 # ‘w’  create (overwrite if exists); ‘w-’ create (fail if exists).
 container = zarr.open(
     #"/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5", mode="r+"
-    "/data/projects/punim2142/etienne/data/zebrafish_out.n5", mode="a"
+    "/data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5", mode="a"
 )
 output_data = container.create_dataset(
     "/volumes/s17/raw", dtype=np.uint8, overwrite=True, shape=(8555, 5155, 4419)

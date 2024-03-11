@@ -15,10 +15,35 @@ from pathlib import Path
 Description
 sample = {crop}-{index} e.g. 16_bot, 23_bot, 23_mid1
 organelle = axon, cell, vessel
+
+This script consists of five major part (in order to run):
+copy_data, relabel, merge_masks + update_masks, generate_points
+
+copy_data
+    Will: "copy_data copies the raw data from zebrafish.n5 and does any label
+    mapping (getting rid of bad labels, separating out various mask labels into
+    separate arrays)"
+
+relabel
+    Will: "relabel takes in the predictions plus the lists of "good"/"bad"/
+    "negative" IDs and creates a new gt/mask arrays"
+
+merge_masks/update_masks
+    Will: "merge_masks/update_masks do the same thing, I think merge_masks was
+    taking too long so I re-implemented it a bit faster. Is just augmenting the
+    masks for each organelle with the ground truth from other organelles.
+    I.e.cells won't be vessels so you can mask in all the cells in the vessel
+    training data."
+
+generate_points
+    Will: "generate_points generates a bunch of points for sample randomly for
+    training. This is only necessary for the very large very sparse training
+    datasets."
+
 """
 
 # Load yamls
-yaml_root_dir = Path("/data/projects/punim2142/etienne/zebrafish_experiments/configs/yamls/zebrafish")
+yaml_root_dir = Path("/data/projects/punim2142/zebrafish_experiments/configs/yamls/zebrafish")
 assert yaml_root_dir.exists(), f"{yaml_root_dir} does not exist!"
 
 # constants
@@ -419,7 +444,7 @@ if COPY_DATA:
     for organelle in targets:  # targets = [vessel, axons, cells]
         logging.info(f" {itertools.chain(datasets['train'], datasets['validate'])}")
         #for crop, index in itertools.chain(datasets["train"], datasets["validate"]):
-        for crop, index in [[16, "bot"], [23, "bot"], [23, "mid1"], [23, "top"]]:  #[[17, 2], [8, 1], [8, 2], [8,2], [23, 1]]:
+        for crop, index in [[8, 2]]:  #[[17, 2], [8, 1], [8, 2], [8, 2]]:  #[[16, "bot"], [23, "bot"], [23, "mid1"], [23, "top"]]:
             #if not condition(None, organelle, None):
             #    logging.info(f"No copying data: {organelle}, {crop}, {index}"")
             #    continue

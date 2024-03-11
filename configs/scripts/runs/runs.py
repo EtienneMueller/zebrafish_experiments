@@ -23,6 +23,9 @@ def cli(log_level):
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
+# python configs/scripts/runs/runs.py update -n zebrafish_cells -d zebrafish_cells -a upsample-unet -ta 3d_lsdaffs -tr default_v3 -s "finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default__1:40000" -s "" -r 2 -i 80000 -v 5000 --force
+# python configs/scripts/runs/runs.py update -n zebrafish_cells -d zebrafish_cells -a upsample-unet -ta 3d_lsdaffs -tr default_v3 -s "" -r 2 -i 80000 -v 5000 --force
+
 @cli.command()
 @click.option("-n", "--name", type=str)
 @click.option("-d", "--datasplit", type=str, multiple=True)

@@ -39,9 +39,9 @@ Data prep: data needs to be converted into n5s or zarrs for training. Once this 
 `--force` flag replaces the config in the mongodb with the new version.
 run configs contain copies of the configs that were used to create them so overwriting `Task`, `Trainer`, `Architecture`, and `DataSplit` configs won't affect old run configs.
 1) `python configs/scripts/datasplits/datasets.py update --force`  # getting very slow due to large number of resolution/target/dataset combinations
-2) `python configs/scripts/tasks/tasks.py update --force`
+2) `python configs/scripts/tasks/tasks.py update`
 3) `python configs/scripts/trainers/trainers.py update --force`
-4) `python configs/scripts/architectures/architectures.py update --force`
+4) `python configs/scripts/architectures/architectures.py update`
 
 ### creating a new run config
 `python configs/scripts/runs/runs.py update`
