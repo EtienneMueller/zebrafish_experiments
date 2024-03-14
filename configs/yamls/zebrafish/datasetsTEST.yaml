@@ -1,6 +1,0 @@
-train:
-  - 16_bot
-  - 23_bot
-  - 23_mid1
-validate:
-  - 23_top
