@@ -2,5 +2,6 @@
 /scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0
 /scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0_OLD
 
+*.DS_Store
 *.pyc
 logs
