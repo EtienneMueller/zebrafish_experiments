@@ -58,7 +58,7 @@ find logs in `runs` directory.
 ### prediction
 Single prediction from command line can be done using `scripts/predict_daisy`.
 
-If you want to run multiple predictions and or use a config file to have a record of what was run you can use
+If you want to run multiple predictions and/or use a config file to have a record of what was run you can use
 `python scripts/submit.py predict`
 Example config files can be found in `configs/zebrafish/predictions`.
 

@@ -14,7 +14,7 @@ from pprint import pprint
 
 
 constants = yaml.safe_load(
-    Path("../configs/yamls/zebrafish/constants.yaml").open("r").read()
+    Path("configs/yamls/zebrafish/constants.yaml").open("r").read()
 )
 
 
@@ -126,7 +126,7 @@ def predict(prediction, workers):
 
     # defaults
     default_datasets = prediction_data.get("datasets")
-    billing = prediction_data["billing"]
+    #billing = prediction_data["billing"]
 
     for matrix in prediction_data["predictions"]:
         offset, shape = matrix.get("roi", (None, None))
@@ -144,16 +144,17 @@ def predict(prediction, workers):
         ), f"Default vs matrix datasets. Provide 1: {default_datasets}, {datasets}!"
 
         for output, dataset, setup, criterion in itertools.product(
-            outputs, datasets if datasets is not None else default_datasets, setups, criteria
+            outputs,
+            datasets if datasets is not None else default_datasets,
+            setups,
+            criteria
         ):
-
             if start is not None:
                 roi = ",".join(list(f"{s}:{e}" for s, e in zip(start, end)))
 
             dataset_name = dataset["name"]
             dataset_array = dataset["array"]
             dataset_container = dataset["container"]
-
 
             command = (
                 [
@@ -175,9 +176,9 @@ def predict(prediction, workers):
                 ]
                 + (
                     [
-                        "--bsub",
-                        "--billing",
-                        billing,
+                        "--local",
+                        #"--billing",
+                        #billing,
                         "-w",
                         f"{workers}",
                     ]

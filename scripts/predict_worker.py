@@ -4,6 +4,8 @@ from dacapo.experiments import Run
 
 import daisy
 
+from funlib.persistence import open_ds
+
 import numpy as np
 import torch
 import click
@@ -68,12 +70,14 @@ def start_worker(
 
     model = run.model.to(device)
 
-    raw_dataset = daisy.open_ds(in_container, in_dataset)
+    #raw_dataset = daisy.open_ds(in_container, in_dataset)
+    raw_dataset = open_ds(in_container, in_dataset)
 
     voxel_size = raw_dataset.voxel_size
     output_voxel_size = model.scale(voxel_size)
 
-    out_dataset = daisy.open_ds(
+    #out_dataset = daisy.open_ds(
+    out_dataset = open_ds(
         out_container,
         f"{out_dataset}",
         mode="r+",

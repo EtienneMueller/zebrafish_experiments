@@ -17,7 +17,7 @@ sample = {crop}-{index} e.g. 16_bot, 23_bot, 23_mid1
 organelle = axon, cell, vessel
 
 This script consists of five major part (in order to run):
-copy_data, relabel, merge_masks + update_masks, generate_points
+copy_data, relabel, merge_masks/update_masks, generate_points
 
 copy_data
     Will: "copy_data copies the raw data from zebrafish.n5 and does any label
@@ -39,7 +39,6 @@ generate_points
     Will: "generate_points generates a bunch of points for sample randomly for
     training. This is only necessary for the very large very sparse training
     datasets."
-
 """
 
 # Load yamls
@@ -75,15 +74,10 @@ out_container = zarr.open(constants["dataset_container"])
 
 def copy_data(crop, index, organelle):
     """
-    Will: "copy_data copies the raw data from zebrafish.n5 and does any label
-    mapping (getting rid of bad labels, separating out various mask labels into
-    separate arrays)"
-
     (Needed 140 GB and 12 min for 23-mid1)
     (Needed 140 GB and 51 min for 16-bot, 23-bot, 23-mid1, 23-top)
 
     Arguments:
-        
         crop {}: e.g. 17, 8, 16, 23
 
         index {str}: e.g. 1, 2, mid1, bot
@@ -179,12 +173,6 @@ def copy_data(crop, index, organelle):
 
 def update_masks(crop, index, targets):
     """
-    Will: "merge_masks/update_masks do the same thing, I think merge_masks was
-    taking too long so I re-implemented it a bit faster. Is just augmenting the
-    masks for each organelle with the ground truth from other organelles.
-    I.e.cells won't be vessels so you can mask in all the cells in the vessel
-    training data."
-
     Arguments:
         organelle {str}: e.g. cells, axon, vessel
         
@@ -217,9 +205,6 @@ def update_masks(crop, index, targets):
 
 def relabel(organelle: str, sample: str, annotation_type: str):
     """
-    Will: "relabel takes in the predictions plus the lists of "good"/"bad"/
-    "negative" IDes and creates a new gt/mask arrays"
-
     Super fast: 1s and 1MB
 
     Arguments:
@@ -331,12 +316,6 @@ def relabel(organelle: str, sample: str, annotation_type: str):
 
 def merge_masks(organelle_a: str, organelle_b: str, sample: str):
     """
-    Will: "merge_masks/update_masks do the same thing, I think merge_masks was
-    taking too long so I re-implemented it a bit faster. Is just augmenting the
-    masks for each organelle with the ground truth from other organelles.
-    I.e. cells won't be vessels so you can mask in all the cells in the vessel
-    training data."
-
     Arguments:
         organelle {str}: e.g. cells, axon, vessel
         
@@ -395,10 +374,6 @@ def merge_masks(organelle_a: str, organelle_b: str, sample: str):
 
 def generate_points(sample: str, organelle: str):
     """
-    Will: "generate_points generates a bunch of points for sample randomly for
-    training. This is only necessary for the very large very sparse training
-    datasets."
-
     Arguments:
         organelle {str}: e.g. cells, axon, vessel
         

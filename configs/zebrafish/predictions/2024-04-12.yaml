@@ -1,0 +1,17 @@
+name: 2024-04-12
+billig: ethan
+predictions:
+  - outputs:
+      - cells
+    datasets:
+      - name: 23_bot
+        container: /data/projects/punim2142/zebrafish_experiments/data/s16_bottom_110nm_rec_.n5
+        array: raw
+    setups:
+      - name: scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0
+        target: cells
+    criteria:
+      - "5000"
+    roi:
+      - [512, 512, 512]
+      - [1024, 1024, 1024]
