@@ -6,8 +6,8 @@
 #SBATCH --mem-per-cpu=256G
 #SBATCH --cpus-per-task=1
 #SBATCH --job-name="reformat_dataset"
-#SBATCH --output /data/projects/punim2142/zebrafish_experiments/data/slurm_output/rf-%j.out
-#SBATCH --error /data/projects/punim2142/zebrafish_experiments/data/slurm_output/rf-%j.err
+#SBATCH --output /data/projects/punim2142/zebrafish_experiments/slurm_out/rf-%j.out
+#SBATCH --error /data/projects/punim2142/zebrafish_experiments/slurm_out/rf-%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=etienne.mueller@unimelb.edu.au
 

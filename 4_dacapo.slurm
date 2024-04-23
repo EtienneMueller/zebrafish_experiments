@@ -7,8 +7,8 @@
 #SBATCH --mem-per-cpu=256G
 #SBATCH --cpus-per-task=1
 #SBATCH --job-name="dacapo"
-#SBATCH --output /data/projects/punim2142/zebrafish_experiments/data/slurm_output/dc-%j.out
-#SBATCH --error /data/projects/punim2142/zebrafish_experiments/data/slurm_output/dc-%j.err
+#SBATCH --output /data/projects/punim2142/zebrafish_experiments/slurm_out/dc-%j.out
+#SBATCH --error /data/projects/punim2142/zebrafish_experiments/slurm_out/dc-%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=etienne.mueller@unimelb.edu.au
 

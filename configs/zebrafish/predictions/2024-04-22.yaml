@@ -1,10 +1,10 @@
-name: 2024-04-12
+name: 2024-04-22
 billig: ethan
 predictions:
   - outputs:
       - cells
     datasets:
-      - name: 23_bot
+      - name: 16
         container: /data/projects/punim2142/zebrafish_experiments/data/s16_bottom_110nm_rec_.n5
         array: raw
     setups:

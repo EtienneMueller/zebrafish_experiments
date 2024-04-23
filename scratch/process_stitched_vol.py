@@ -28,7 +28,7 @@ path = Path(
 # ‘w’  create (overwrite if exists); ‘w-’ create (fail if exists).
 container = zarr.open(
     #"/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5", mode="r+"
-    "/data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5", mode="a"
+    "/data/projects/punim2142/zebrafish_experiments/data/predictions/zebrafish_out.n5", mode="a"
 )
 output_data = container.create_dataset(
     "/volumes/s17/raw", dtype=np.uint8, overwrite=True, shape=(8555, 5155, 4419)

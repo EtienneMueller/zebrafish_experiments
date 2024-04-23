@@ -168,7 +168,7 @@ def predict(prediction, workers):
                     "-oc",
                     constants["prediction_container"],
                     "-od",
-                    f"predictions/{name}/{dataset_name}/{output}_{setup['name']}__{criterion}",
+                    f"/data/projects/punim2142/zebrafish_experiments/data/predictions/{name}/{dataset_name}/{output}_{setup['name']}__{criterion}",
                     "-ic",
                     dataset_container,
                     "-id",
