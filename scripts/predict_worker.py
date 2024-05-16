@@ -77,11 +77,7 @@ def start_worker(
     output_voxel_size = model.scale(voxel_size)
 
     #out_dataset = daisy.open_ds(
-    out_dataset = open_ds(
-        out_container,
-        f"{out_dataset}",
-        mode="r+",
-    )
+    out_dataset = open_ds(out_container, f"{out_dataset}", mode="r+")
 
     with torch.no_grad():
         while True:

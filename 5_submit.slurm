@@ -3,7 +3,7 @@
 #SBATCH --ntasks=1
 #SBATCH -p gpu-a100
 #SBATCH --gres=gpu:1
-#SBATCH --time=4-00:00:00
+#SBATCH --time=7-00:00:00
 #SBATCH --mem-per-cpu=256G
 #SBATCH --cpus-per-task=1
 #SBATCH --job-name="submit"

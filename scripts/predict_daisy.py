@@ -5,7 +5,7 @@ import numpy as np
 import subprocess
 import sys
 
-from funlib.persistence import open_ds
+from funlib.persistence import open_ds, prepare_ds
 
 from dacapo.store.create_store import create_config_store
 from dacapo.experiments import Run
@@ -169,15 +169,16 @@ def predict(
     total_write_roi = parsed_roi
     total_read_roi = total_write_roi.grow(context, context)
 
-    # daisy.prepare_ds(
-    #     out_container,
-    #     f"{out_dataset}",
-    #     total_roi=total_write_roi,
-    #     voxel_size=output_voxel_size,
-    #     write_size=write_roi.shape,
-    #     dtype=np.uint8,
-    #     num_channels=run.task.predictor.num_channels,
-    # )
+    #daisy.prepare_ds(
+    prepare_ds(
+        out_container,
+        f"{out_dataset}",
+        total_roi=total_write_roi,
+        voxel_size=output_voxel_size,
+        write_size=write_roi.shape,
+        dtype=np.uint8,
+        num_channels=run.task.predictor.num_channels,
+    )
 
     task = daisy.Task(
         "test_server_task",
