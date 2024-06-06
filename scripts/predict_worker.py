@@ -4,7 +4,7 @@ from dacapo.experiments import Run
 
 import daisy
 
-from funlib.persistence import open_ds
+from funlib.persistence import open_ds, Array
 
 import numpy as np
 import torch
@@ -93,7 +93,8 @@ def start_worker(
                 raw_input = np.expand_dims(raw_input, (0, 1))
                 write_roi = block.write_roi.intersect(out_dataset.roi)
 
-                predictions = daisy.Array(
+                #predictions = daisy.Array(
+                predictions = Array(
                     model.forward(torch.from_numpy(raw_input).float().to(device))
                     .detach()
                     .cpu()
@@ -105,7 +106,8 @@ def start_worker(
                 write_data = predictions.to_ndarray(write_roi)
                 out_dataset[write_roi] = (255 / (1 + np.exp(-write_data))).astype(np.uint8)
 
-                block.status = daisy.BlockStatus.SUCCESS
+                # Commented out by recommendations of Jeff
+                #block.status = daisy.BlockStatus.SUCCESS
 
 
 if __name__ == "__main__":
