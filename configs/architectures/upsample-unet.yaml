@@ -1,0 +1,30 @@
+__type__: CNNectomeUNetConfig
+_eval_shape_increase: !!python/tuple
+- 72
+- 72
+- 72
+constant_upsample: true
+downsample_factors:
+- !!python/tuple
+  - 2
+  - 2
+  - 2
+- &id001 !!python/tuple
+  - 3
+  - 3
+  - 3
+- *id001
+fmap_inc_factor: 6
+fmaps_in: 1
+fmaps_out: 72
+input_shape: !!python/tuple
+- 216
+- 216
+- 216
+kernel_size_down: null
+kernel_size_up: null
+name: upsample-unet
+num_fmaps: 12
+padding: valid
+upsample_factors: null
+use_attention: false

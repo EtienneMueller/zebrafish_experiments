@@ -1,0 +1,154 @@
+__type__: TrainValidateDataSplitConfig
+name: zebrafish_cells
+train_configs:
+- __type__: RawGTDatasetConfig
+  gt_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/8-1/cells
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_gt_8-1_cells
+    snap_to_grid: null
+  mask_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/8-1/cells_mask
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_mask_8-1_cells
+    snap_to_grid: null
+  name: zebrafish_8-1_cells
+  raw_config:
+    __type__: IntensitiesArrayConfig
+    max: 255
+    min: 0
+    name: zebrafish_raw_8-1
+    source_array_config:
+      __type__: ZarrArrayConfig
+      _axes: null
+      dataset: volumes/8-1/raw
+      file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+      name: zebrafish_raw_8-1_uint8
+      snap_to_grid: null
+  sample_points: null
+  weight: 5
+- __type__: RawGTDatasetConfig
+  gt_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/16_bot/cells
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_gt_16_bot_cells
+    snap_to_grid: null
+  mask_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/16_bot/cells_mask
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_mask_16_bot_cells
+    snap_to_grid: null
+  name: zebrafish_16_bot_cells
+  raw_config:
+    __type__: IntensitiesArrayConfig
+    max: 255
+    min: 0
+    name: zebrafish_raw_16_bot
+    source_array_config:
+      __type__: ZarrArrayConfig
+      _axes: null
+      dataset: volumes/16_bot/raw
+      file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+      name: zebrafish_raw_16_bot_uint8
+      snap_to_grid: null
+  sample_points: null
+  weight: 1
+- __type__: RawGTDatasetConfig
+  gt_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/23_bot/cells
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_gt_23_bot_cells
+    snap_to_grid: null
+  mask_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/23_bot/cells_mask
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_mask_23_bot_cells
+    snap_to_grid: null
+  name: zebrafish_23_bot_cells
+  raw_config:
+    __type__: IntensitiesArrayConfig
+    max: 255
+    min: 0
+    name: zebrafish_raw_23_bot
+    source_array_config:
+      __type__: ZarrArrayConfig
+      _axes: null
+      dataset: volumes/23_bot/raw
+      file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+      name: zebrafish_raw_23_bot_uint8
+      snap_to_grid: null
+  sample_points: null
+  weight: 1
+- __type__: RawGTDatasetConfig
+  gt_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/23_mid1/cells
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_gt_23_mid1_cells
+    snap_to_grid: null
+  mask_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/23_mid1/cells_mask
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_mask_23_mid1_cells
+    snap_to_grid: null
+  name: zebrafish_23_mid1_cells
+  raw_config:
+    __type__: IntensitiesArrayConfig
+    max: 255
+    min: 0
+    name: zebrafish_raw_23_mid1
+    source_array_config:
+      __type__: ZarrArrayConfig
+      _axes: null
+      dataset: volumes/23_mid1/raw
+      file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+      name: zebrafish_raw_23_mid1_uint8
+      snap_to_grid: null
+  sample_points: null
+  weight: 1
+validate_configs:
+- __type__: RawGTDatasetConfig
+  gt_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/8-1/cells
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_gt_8-1_cells
+    snap_to_grid: null
+  mask_config:
+    __type__: ZarrArrayConfig
+    _axes: null
+    dataset: volumes/8-1/cells_mask
+    file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+    name: zebrafish_mask_8-1_cells
+    snap_to_grid: null
+  name: zebrafish_8-1_cells
+  raw_config:
+    __type__: IntensitiesArrayConfig
+    max: 255
+    min: 0
+    name: zebrafish_raw_8-1
+    source_array_config:
+      __type__: ZarrArrayConfig
+      _axes: null
+      dataset: volumes/8-1/raw
+      file_name: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+      name: zebrafish_raw_8-1_uint8
+      snap_to_grid: null
+  sample_points: null
+  weight: 5

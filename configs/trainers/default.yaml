@@ -1,0 +1,32 @@
+__type__: GunpowderTrainerConfig
+augments:
+- __type__: SimpleAugmentConfig
+- __type__: ElasticAugmentConfig
+  control_point_displacement_sigma:
+  - 10.0
+  - 10.0
+  - 10.0
+  control_point_spacing:
+  - 100
+  - 100
+  - 100
+  rotation_interval:
+  - 0
+  - 1.5707963267948966
+  subsample: 8
+  uniform_3d_rotation: true
+- __type__: IntensityAugmentConfig
+  clip: true
+  scale:
+  - 0.85
+  - 1.15
+  shift:
+  - -0.1
+  - 0.1
+batch_size: 2
+clip_raw: false
+learning_rate: 0.0001
+min_masked: 0.01
+name: default
+num_data_fetchers: 20
+snapshot_interval: 10000

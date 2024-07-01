@@ -186,8 +186,12 @@ def start_worker(
 
     output_basename = daisy.get_worker_log_basename(worker_id, task_id)
 
-    log_out = output_basename.parent / f"worker_{worker_id}.out-bsub"
-    log_err = output_basename.parent / f"worker_{worker_id}.err-bsub"
+    #log_out = output_basename.parent / f"worker_{worker_id}.out-bsub"
+    #log_err = output_basename.parent / f"worker_{worker_id}.err-bsub"
+
+    log_out = "/data/projects/punim2142/zebrafish_experiments/slurm_out/debug-%j.out"
+    log_err = "/data/projects/punim2142/zebrafish_experiments/slurm_out/debug-%j.err"
+
 
     config = {
         "sample_name": sample_name,
@@ -222,8 +226,18 @@ def start_worker(
 
     command = f"python {worker} {config_file}"
 
-    subprocess.run(
-        ["bsub", "-I", "-P", billing, "-n", "2", "-o", log_out, "-e", log_err, command]
+    #subprocess.run(
+    #    ["bsub", "-I", "-P", billing, "-n", "2", "-o", log_out, "-e", log_err, command]
+    #)
+
+    subprocess.run([
+        "srun", 
+        "-u", billing,
+        "--ntasks", "1",
+        "-o", log_out,
+        "-e", log_err,
+        "--pty",
+        command]
     )
 
 
@@ -242,15 +256,37 @@ if __name__ == "__main__":
     context = Coordinate(16, 16, 16) * voxel_size
     start = time.time()
 
+    # extract_fragments(
+    #     sample_name=f"s17-stitched",
+    #     affs_file="/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5",
+    #     affs_dataset=f"predictions/2023-05-09/s17/cells_finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v3__1__60000",
+    #     fragments_file="/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5",
+    #     fragments_dataset="predictions/2023-05-09/s17/cells_finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v3__1__60000_fragments",
+    #     block_size=tuple(block_size),
+    #     context=tuple(context),
+    #     db_host="mongodb://localhost:27017/",
+    #     db_name="dacapo_zebrafish",
+    #     num_workers=64,
+    #     fragments_in_xy=False,
+    #     epsilon_agglomerate=0.1,
+    #     mask_file=None,
+    #     mask_dataset=None,
+    #     filter_fragments=0.5,
+    #     replace_sections=None,
+    #     drop=True,
+    #     shrink_objects=1,
+    #     billing="funke",
+    # )
+
     extract_fragments(
-        sample_name=f"s17-stitched",
-        affs_file="/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5",
-        affs_dataset=f"predictions/2023-05-09/s17/cells_finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v3__1__60000",
-        fragments_file="/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5",
-        fragments_dataset="predictions/2023-05-09/s17/cells_finetuned_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v3__1__60000_fragments",
+        sample_name=f"s16_bottom_110nm_rec_.n5",
+        affs_file="/data/projects/punim2142/zebrafish_experiments/data/predictions/zebrafish.n5",
+        affs_dataset=f"/predictions/2024-04-22/16/cells_scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0__5000",
+        fragments_file="/data/projects/punim2142/zebrafish_experiments/data/predictions/zebrafish.n5",
+        fragments_dataset="/predictions/2024-04-22/16/cells_scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0__5000_fragments",
         block_size=tuple(block_size),
         context=tuple(context),
-        db_host="mongodb://localhost:27017/",
+        db_host="mongodb://172.26.132.124:27017",
         db_name="dacapo_zebrafish",
         num_workers=64,
         fragments_in_xy=False,
@@ -261,7 +297,7 @@ if __name__ == "__main__":
         replace_sections=None,
         drop=True,
         shrink_objects=1,
-        billing="funke",
+        billing="etiennem",
     )
 
     end = time.time()

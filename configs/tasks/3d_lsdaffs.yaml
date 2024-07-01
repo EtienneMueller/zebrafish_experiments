@@ -1,0 +1,46 @@
+__type__: AffinitiesTaskConfig
+affs_weight_clipmax: 0.95
+affs_weight_clipmin: 0.05
+background_as_object: false
+lsd_weight_clipmax: 0.95
+lsd_weight_clipmin: 0.05
+lsds: true
+lsds_to_affs_weight_ratio: 1
+name: 3d_lsdaffs
+neighborhood:
+- !!python/tuple
+  - 1
+  - 0
+  - 0
+- !!python/tuple
+  - 0
+  - 1
+  - 0
+- !!python/tuple
+  - 0
+  - 0
+  - 1
+- !!python/tuple
+  - 3
+  - 0
+  - 0
+- !!python/tuple
+  - 0
+  - 3
+  - 0
+- !!python/tuple
+  - 0
+  - 0
+  - 3
+- !!python/tuple
+  - 9
+  - 0
+  - 0
+- !!python/tuple
+  - 0
+  - 9
+  - 0
+- !!python/tuple
+  - 0
+  - 0
+  - 9
