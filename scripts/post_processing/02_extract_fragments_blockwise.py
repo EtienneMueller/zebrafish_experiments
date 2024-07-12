@@ -186,11 +186,11 @@ def start_worker(
 
     output_basename = daisy.get_worker_log_basename(worker_id, task_id)
 
-    #log_out = output_basename.parent / f"worker_{worker_id}.out-bsub"
-    #log_err = output_basename.parent / f"worker_{worker_id}.err-bsub"
+    log_out = output_basename.parent / f"worker_{worker_id}.out"
+    log_err = output_basename.parent / f"worker_{worker_id}.err"
 
-    log_out = "/data/projects/punim2142/zebrafish_experiments/slurm_out/debug-%j.out"
-    log_err = "/data/projects/punim2142/zebrafish_experiments/slurm_out/debug-%j.err"
+    #log_out = "/data/projects/punim2142/zebrafish_experiments/slurm_out/post_worker-%j.out"
+    #log_err = "/data/projects/punim2142/zebrafish_experiments/slurm_out/post_worker-%j.err"
 
 
     config = {
@@ -226,19 +226,26 @@ def start_worker(
 
     command = f"python {worker} {config_file}"
 
-    #subprocess.run(
-    #    ["bsub", "-I", "-P", billing, "-n", "2", "-o", log_out, "-e", log_err, command]
-    #)
+    # subprocess.run([
+    #     "bsub",
+    #     "-I",
+    #     "-P", billing,
+    #     "-n", "2",
+    #     "-o", log_out,
+    #     "-e", log_err,
+    #     command
+    # ])
 
     subprocess.run([
         "srun", 
-        "-u", billing,
+        "--account", billing,
         "--ntasks", "1",
-        "-o", log_out,
-        "-e", log_err,
-        "--pty",
-        command]
-    )
+        -"-mem-per-cpu", "64G",
+        "--output", log_out,
+        "--error", log_err,
+        #"--pty",
+        command
+    ])
 
 
 def check_block(completed_collection, complete_cache, block):
@@ -281,14 +288,14 @@ if __name__ == "__main__":
     extract_fragments(
         sample_name=f"s16_bottom_110nm_rec_.n5",
         affs_file="/data/projects/punim2142/zebrafish_experiments/data/predictions/zebrafish.n5",
-        affs_dataset=f"/predictions/2024-04-22/16/cells_scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0__5000",
+        affs_dataset=f"predictions/2024-04-22/16/cells_scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0__5000",
         fragments_file="/data/projects/punim2142/zebrafish_experiments/data/predictions/zebrafish.n5",
-        fragments_dataset="/predictions/2024-04-22/16/cells_scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0__5000_fragments",
+        fragments_dataset="predictions/2024-04-22/16/cells_scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0__5000_fragments",
         block_size=tuple(block_size),
         context=tuple(context),
         db_host="mongodb://172.26.132.124:27017",
         db_name="dacapo_zebrafish",
-        num_workers=64,
+        num_workers=1,
         fragments_in_xy=False,
         epsilon_agglomerate=0.1,
         mask_file=None,
@@ -297,7 +304,7 @@ if __name__ == "__main__":
         replace_sections=None,
         drop=True,
         shrink_objects=1,
-        billing="etiennem",
+        billing="punim2142",
     )
 
     end = time.time()
