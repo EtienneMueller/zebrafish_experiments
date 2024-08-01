@@ -152,6 +152,8 @@ def extract_fragments(
         fit="shrink",
     )
 
+    logging.info("extract_fragments_task: %s", extract_fragments_task)
+
     daisy.run_blockwise([extract_fragments_task])
 
 
@@ -183,8 +185,13 @@ def start_worker(
     logging.info("mask_file: %s", mask_file)
     logging.info("mask_dataset: %s", mask_dataset)
     logging.info("filter_fragments: %s", filter_fragments)
+    logging.info("worker_id type: %s", worker_id)
+    logging.info("worker_id type: %s", type(worker_id))
+    logging.info("worker_id type: %s", type(int(worker_id)))
+    logging.info("task_id type: %s", task_id)
+    logging.info("task_id type: %s", type(task_id))
 
-    output_basename = daisy.get_worker_log_basename(worker_id, task_id)
+    output_basename = daisy.get_worker_log_basename(int(worker_id), task_id)
 
     log_out = output_basename.parent / f"worker_{worker_id}.out"
     log_err = output_basename.parent / f"worker_{worker_id}.err"
