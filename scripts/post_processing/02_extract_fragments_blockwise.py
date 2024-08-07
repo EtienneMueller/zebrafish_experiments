@@ -247,7 +247,7 @@ def start_worker(
         "srun", 
         "--account", billing,
         "--ntasks", "1",
-        -"-mem-per-cpu", "64G",
+        "--mem-per-cpu", "64G",
         "--output", log_out,
         "--error", log_err,
         #"--pty",
