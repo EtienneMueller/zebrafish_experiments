@@ -32,6 +32,7 @@ def cli(log_level):
 @cli.command()
 @click.option("--force/--no-force", default=False)
 def update(force):
+    logging.info("trainers.py update")
 
     config_store = create_config_store()
 
@@ -83,7 +84,7 @@ def update(force):
     )
 
     gunpowder_config_v3 = GunpowderTrainerConfig(
-        name="default_v4",
+        name="default_v6",
         batch_size=2,
         learning_rate=0.0001,
         augments=[
@@ -126,4 +127,5 @@ def update(force):
 
 
 if __name__ == "__main__":
+    logging.info("trainers.py")
     cli()

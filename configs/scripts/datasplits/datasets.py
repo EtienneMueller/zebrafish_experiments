@@ -1,3 +1,10 @@
+import click
+import logging
+import numpy as np
+import random
+import yaml
+from pathlib import Path
+from funlib.geometry import Coordinate
 from dacapo.store.create_store import create_config_store
 from dacapo.store.config_store import DuplicateNameError
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
@@ -7,16 +14,6 @@ from dacapo.experiments.datasplits.datasets.arrays import (
     IntensitiesArrayConfig,
     OnesArrayConfig,
 )
-
-from funlib.geometry import Coordinate
-
-import numpy as np
-import click
-
-import logging
-from pathlib import Path
-import yaml
-import random
 
 
 @click.group()
@@ -34,6 +31,7 @@ def cli(log_level):
 @cli.command()
 @click.option("--force/--no-force", default=False)
 def update(force):
+    logging.info("datasets.py update")
     # Load yamls
     yaml_root_dir = Path("configs/yamls/zebrafish")
     assert yaml_root_dir.exists(), f"{yaml_root_dir} does not exist!"
@@ -145,6 +143,7 @@ def update(force):
             config_store.store_datasplit_config(datasplit_config)
         except DuplicateNameError as e:
             if force:
+                # DELETE_ONE needs old Dacapo
                 config_store.datasplits.delete_one({"name": datasplit_config.name})
                 config_store.store_datasplit_config(datasplit_config)
             else:
@@ -161,4 +160,5 @@ def update(force):
 
 
 if __name__ == "__main__":
+    logging.info("datasets.py")
     cli()

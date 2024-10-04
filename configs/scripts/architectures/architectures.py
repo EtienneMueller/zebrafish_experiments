@@ -24,6 +24,7 @@ def cli(log_level):
 
 @cli.command()
 def update():
+    logging.info("architectures.py update")
 
     config_store = create_config_store()
 
@@ -55,4 +56,5 @@ def update():
 
 
 if __name__ == "__main__":
+    logging.info("architectures.py")
     cli()

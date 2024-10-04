@@ -41,6 +41,7 @@ generate_points
     datasets."
 """
 
+
 # Load yamls
 yaml_root_dir = Path("/data/projects/punim2142/zebrafish_experiments/configs/yamls/zebrafish")
 assert yaml_root_dir.exists(), f"{yaml_root_dir} does not exist!"
@@ -72,17 +73,17 @@ in_container = zarr.open(constants["input_container"])
 out_container = zarr.open(constants["dataset_container"])
 
 
-def copy_data(crop, index, organelle):
+def copy_data(organelle, crop, index):
     """
     (Needed 140 GB and 12 min for 23-mid1)
     (Needed 140 GB and 51 min for 16-bot, 23-bot, 23-mid1, 23-top)
 
     Arguments:
-        crop {}: e.g. 17, 8, 16, 23
+        organelle {str}: e.g. cells, axon, vessel
+
+        crop {str}: e.g. 17, 8, 16, 23
 
         index {str}: e.g. 1, 2, mid1, bot
-
-        organelle {str}: e.g. cells, axon, vessel
     """
     # here: zebrafish.n5/volumes/s17/raw/
     raw = in_container[constants["raw_dataset"].format(sample=f"{crop}_{index}")][:]
@@ -108,7 +109,7 @@ def copy_data(crop, index, organelle):
             # DOES NOT EXIST
             in_data = in_container[
                 constants["gt_dataset"].format(
-                    sample=f"{crop}_{index}", organelle="all"
+                    sample=f"{crop}-{index}", organelle="all"
                 )
             ][:]
         except KeyError as e:
@@ -152,7 +153,9 @@ def copy_data(crop, index, organelle):
             .get("mask_id", -1)
         )
     else:
-        logging.info("else")
+        logging.info("else: mask_id is None")
+        logging.debug(np.shape(in_data))
+        logging.debug(in_data)
         in_mask = np.ones_like(in_data)
     
     logging.info("in_data[in_mask == 0] = 0")
@@ -169,38 +172,6 @@ def copy_data(crop, index, organelle):
     out_container[
         constants["mask_dataset"].format(sample=f"{crop}-{index}", organelle=organelle)
     ] = in_mask.astype(np.uint64)
-
-
-def update_masks(crop, index, targets):
-    """
-    Arguments:
-        organelle {str}: e.g. cells, axon, vessel
-        
-        sample {str}: e.g. 23_bot
-
-        annotation_type {str}: e.g. good, negative, segments
-    """
-    # any annotated organelle can be masked in for the other organelle training volumes
-    annotated_organelles = (
-        sum(
-            [
-                out_container[
-                    constants["gt_dataset"].format(
-                        sample=f"{crop}-{index}", organelle=organelle
-                    )
-                ][:]
-                for organelle in targets
-            ]
-        )
-        > 0
-    )
-    for organelle in targets:
-        mask_dataset = out_container[
-            constants["mask_dataset"].format(
-                sample=f"{crop}-{index}", organelle=organelle
-            )
-        ]
-        mask_dataset[:] = (mask_dataset + annotated_organelles) > 0
 
 
 def relabel(organelle: str, sample: str, annotation_type: str):
@@ -243,12 +214,15 @@ def relabel(organelle: str, sample: str, annotation_type: str):
     logging.info(f"{rows[0]}")
 
     if annotation_type == "good":
+        logging.debug("if annotation good")
         row = rows[0]
         good_ids = [int(x) for x in row]
     elif annotation_type == "negative":  # is skipped anyways
+        logging.debug("if annotation negative")
         row = rows[0]
         bad_ids = [int(x) for x in row]
     elif annotation_type == "segments":  # is skipped anyways
+        logging.debug("if annotation segments")
         segments = [[int(y) for y in x if len(y) > 0] for x in zip(*rows)]
 
     # gt_dataset ("volumes/{sample}/{organelle}") from INPUT_CONTAINER
@@ -259,6 +233,7 @@ def relabel(organelle: str, sample: str, annotation_type: str):
     # zebrafish.n5
     # |-23_bot
     # |--cells
+    logging.debug("fragments")
     fragments = in_container[
         constants["gt_dataset"].format(sample=sample, organelle=organelle)
     ][:]
@@ -267,33 +242,48 @@ def relabel(organelle: str, sample: str, annotation_type: str):
     # HOW DOES IT GET THERE?
     # if it does not exist it gets filled with zeros
     try:
+        logging.debug("try")
         in_gt = out_container[
             constants["gt_dataset"].format(sample=sample, organelle=organelle)
         ][:]
     except KeyError:
+        logging.debug("exception")
         in_gt = np.zeros_like(fragments)
     
     # in_mask is set to whatever is saved in dataset_container
     # HOW DOES IT GET THERE?
     # if it does not exist it gets filled with zeros
     try:
+        logging.debug("try2")
         in_mask = out_container[
             constants["mask_dataset"].format(sample=sample, organelle=organelle)
         ][:]
     except KeyError:
+        logging.debug("exception2")
         in_mask = np.zeros_like(fragments)
 
     if annotation_type == "good":
+        logging.debug("if good")
+        logging.debug("row")
         row = rows[0]
+        logging.debug("good_ids")
         good_ids = [int(x) for x in row]
+        logging.debug("maks")
+        logging.debug(fragments)
+        logging.debug(good_ids)
         mask = np.isin(fragments, good_ids)
+        logging.debug("in_gt")
+        # pay attention that the hyphen/underscores match (e.g. 16_bot/16-bot)
         in_gt[mask] = fragments[mask]
+        logging.debug("in_mask")
         in_mask = np.stack([in_mask, mask]).max(axis=0)
     elif annotation_type == "negative":
+        logging.debug("if negative")
         bad_ids = [int(x) for x in row]
         mask = np.isin(fragments, bad_ids)
         in_mask = np.stack([in_mask, mask]).max(axis=0)
     elif annotation_type == "segments":
+        logging.debug("if segments")
         for segment in segments:
             segment_id = min(segment)
             mask = np.isin(fragments, segment)
@@ -302,16 +292,40 @@ def relabel(organelle: str, sample: str, annotation_type: str):
     else:
         return
 
+    logging.debug("raw")
     raw = in_container[constants["raw_dataset"].format(sample=sample)][:]
+    logging.debug("out")
     out_container[constants["raw_dataset"].format(sample=sample)] = raw.astype(np.uint8)
 
     logging.info(f"Mask sum: {in_mask.sum()}")
     out_container[
         constants["gt_dataset"].format(sample=sample, organelle=organelle)
     ] = in_gt.astype(np.uint64)
+    logging.debug("out2")
     out_container[
         constants["mask_dataset"].format(sample=sample, organelle=organelle)
     ] = in_mask.astype(np.uint64)
+
+
+def update_masks(crop, index, targets):
+    """
+    Arguments:
+        organelle {str}: e.g. cells, axon, vessel
+        
+        sample {str}: e.g. 23_bot
+
+        annotation_type {str}: e.g. good, negative, segments
+    """
+    # any annotated organelle can be masked in for the other organelle training volumes
+    logging.debug([out_container[constants["gt_dataset"].format(sample=f"{crop}-{index}", organelle=organelle)][:] for organelle in targets])
+    annotated_organelles = (sum([out_container[constants["gt_dataset"].format(sample=f"{crop}-{index}", organelle=organelle)][:] for organelle in targets]) > 0)
+    for organelle in targets:
+        mask_dataset = out_container[
+            constants["mask_dataset"].format(
+                sample=f"{crop}-{index}", organelle=organelle
+            )
+        ]
+        mask_dataset[:] = (mask_dataset + annotated_organelles) > 0
 
 
 def merge_masks(organelle_a: str, organelle_b: str, sample: str):
@@ -396,35 +410,40 @@ def generate_points(sample: str, organelle: str):
     )
 
 
-COPY_DATA = True
+COPY_DATA = False
 RELABEL = False
-MERGE_MASKS = False
+MERGE_MASKS = True
 UPDATE_MASKS = False
 GENERATE_POINTS = False
 
-logging.basicConfig(
-    #format='%(asctime)s %(levelname)-2s [%(lineno)d] %(message)s',
-    format='%(asctime)s %(levelname)s [%(lineno)d] %(message)s',
-    datefmt='%Y/%m/%d-%H:%M:%S',
-    level=logging.INFO
-)
+# logging.basicConfig(
+#     #format='%(asctime)s %(levelname)-2s [%(lineno)d] %(message)s',
+#     format='%(asctime)s %(levelname)s [%(lineno)d] %(message)s',
+#     datefmt='%Y/%m/%d-%H:%M:%S',
+#     level=logging.INFO
+# )
+
+logging.basicConfig(format='(%(lineno)d):%(levelname)-8s %(message)s - (%(asctime)s,%(msecs)03d - %(pathname)s:%(filename)s:%(lineno)d)',
+    datefmt='%Y-%m-%d:%H:%M:%S',
+    level=logging.DEBUG)
+
 
 condition = lambda sample, organelle, annotation_type: (
-    organelle == "cells" and sample == "23-top"
+    organelle == "cells" and sample == "23_mid1"
 )
 
 # some error in itertools.chain
 if COPY_DATA:
     logging.info("-COPY_DATA-")
-    for organelle in targets:  # targets = [vessel, axons, cells]
-        logging.info(f" {itertools.chain(datasets['train'], datasets['validate'])}")
+    for organelle in ['axons', 'vessels']:  #['cells']:  #targets:  # targets = [vessel, axons, cells]
+        logging.info(f"{organelle} {itertools.chain(datasets['train'], datasets['validate'])}")
         #for crop, index in itertools.chain(datasets["train"], datasets["validate"]):
-        for crop, index in [[8, 2]]:  #[[17, 2], [8, 1], [8, 2], [8, 2]]:  #[[16, "bot"], [23, "bot"], [23, "mid1"], [23, "top"]]:
+        for crop, index in [[23, 'bot']]:  #[[16, 'bot'], [23, 'bot'], [23, 'mid1']]:  # [[8, 1], [8, 2], [17, 2]]:
             #if not condition(None, organelle, None):
             #    logging.info(f"No copying data: {organelle}, {crop}, {index}"")
             #    continue
             logging.info(f"COPYING DATA: {organelle}, {crop}, {index}")
-            copy_data(crop, index, organelle)
+            copy_data(organelle, crop, index)
 
 # see id_annotations.yaml
 if RELABEL:
@@ -432,9 +451,9 @@ if RELABEL:
     for organelle, samples in id_annotations.items():
         for sample, annotation_types in samples.items():
             for annotation_type in annotation_types:
-                if not condition(sample, organelle, annotation_type):
-                    logging.info(f"Skipping: {organelle}, {sample}, {annotation_type}")
-                    continue
+                # if not condition(sample, organelle, annotation_type):
+                #     logging.info(f"Skipping: {organelle}, {sample}, {annotation_type}")
+                #     continue
                 logging.info(f"Relabeling: {organelle}, {sample}, {annotation_type}")
                 relabel(organelle, sample, annotation_type)
 
@@ -457,7 +476,7 @@ if MERGE_MASKS:
 if UPDATE_MASKS:
     logging.info("-UPDATE_MASKS-")
     #for crop, index in itertools.chain(datasets["train"], datasets["validate"]):
-    for crop, index in [[23, 1]]:  #[[17, 2], [8, 1], [8, 2], [8,2]]:
+    for crop, index in [[17, 2], [8, 1], [8, 2]]:  # [[16, 'bot'], [23, 'bot'], [23, 'mid1']]:
         #if not condition(None, None, None):
         #    logging.info(f"No updating masks: {crop}, {index}")
         #    continue
@@ -485,3 +504,5 @@ if GENERATE_POINTS:
             continue
         logging.info(f"Generating points: {sample}, {organelle}")
         generate_points(sample, organelle)
+
+logging.info("...all done!")

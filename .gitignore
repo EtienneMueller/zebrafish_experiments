@@ -1,6 +1,8 @@
 /configs/runs/scratch_3d_lsdaffs_zebrafish_cells_upsample-unet_default_v4__0
 /daisy_logs
 /data
+/data2
+/predictions
 /scratch_*
 /slurm_out
 /src

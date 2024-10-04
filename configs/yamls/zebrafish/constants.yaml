@@ -1,14 +1,14 @@
 # default paths to check for data
 # used in reformat_dataset
-input_container: /data/projects/punim2142/zebrafish_experiments/data/michelle_zebrafish/zebrafish.n5
+input_container: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_in.n5
 # /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/zebrafish.n5
 
-# used in reformat_dataset
-id_annotations_path: /data/projects/punim2142/zebrafish_experiments/data/michelle_zebrafish/id_annotations/{organelle}-{sample}-{annotation_type}.txt
+# used in reformat_dataset (relabel, maybe merge_mask?)
+id_annotations_path: /data/projects/punim2142/zebrafish_experiments/data/id_annotations/{organelle}-{sample}-{annotation_type}.txt
 # /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/id_annotations/{organelle}-{sample}-{annotation_type}.txt
 
 # used in reformat_dataset, submit
-dataset_container: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5
+dataset_container: /data/projects/punim2142/zebrafish_experiments/data/zebrafish.n5
 # /nrs/funke/pattonw/data/zebrafish/zebrafish.n5
 
 # not used

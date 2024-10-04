@@ -10,8 +10,8 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=etienne.mueller@unimelb.edu.au
 
-python configs/scripts/datasplits/datasets.py update --force
-python configs/scripts/tasks/tasks.py update
-python configs/scripts/trainers/trainers.py update --force
-python configs/scripts/architectures/architectures.py update
-python configs/scripts/runs/runs.py update -n zebrafish_cells -d zebrafish_cells -a upsample-unet -ta 3d_lsdaffs -tr default_v4 -s "" -r 2 -i 80000 -v 5000 --force
+#python configs/scripts/tasks/tasks.py update
+#python configs/scripts/trainers/trainers.py update --force
+#python configs/scripts/architectures/architectures.py update
+#python configs/scripts/datasplits/datasets.py update --force
+python configs/scripts/runs/runs.py update -n zebrafish_cells -d zebrafish_cells -a upsample-unet -ta 3d_lsdaffs -tr default_v6 -s "" -r 2 -i 80000 -v 5000 --force

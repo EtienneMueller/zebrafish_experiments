@@ -2,8 +2,8 @@
 #SBATCH --account="punim2142"
 #SBATCH --ntasks=1
 ##SBATCH -p bigmem
-#SBATCH --time=02:00:00
-#SBATCH --mem-per-cpu=256G
+#SBATCH --time=00:30:00
+#SBATCH --mem-per-cpu=128G
 #SBATCH --cpus-per-task=1
 #SBATCH --job-name="reformat_dataset"
 #SBATCH --output /data/projects/punim2142/zebrafish_experiments/slurm_out/rf-%j.out

@@ -19,7 +19,7 @@ import itertools
     ),
     default="INFO",
 )
-def cli(log_level):
+def cli(log_level="info"):
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -49,6 +49,8 @@ def update(
     validation_interval,
     force,
 ):
+    logging.info("runs.py update")
+
     datasplits = datasplit
     architectures = architecture
     tasks = task
@@ -148,4 +150,5 @@ def update(
 
 
 if __name__ == "__main__":
+    logging.info("runs.py")
     cli()
