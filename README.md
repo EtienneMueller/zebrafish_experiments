@@ -19,21 +19,36 @@ Update the `dacapo.yaml` file to point to your own mongodb and file storage path
 
 ## installation
 
-create conda environment with `python >= 3.10`
+create conda environment with `python >= 3.10` and install latest DaCapo
 
-`pip install git+https://github.com/funkelab/dacapo`
-
-`pip install git+https://github.com/pattonw/funlib.show.neuroglancer@funlib-update`
-
-`pip install -r requirements.txt`
-
+```bash
+conda create -n dacapo python=3.10
+conda activate dacapo
+pip install dacapo-ml
+```
 
 ## usage
 use `--help` to get more info about script parameters
 
 ### parsing spreadsheet
 
-Data prep: data needs to be converted into n5s or zarrs for training. Once this is done you can use `scratch/reformat_dataset.py` to compute masks, sample points, etc. for the data.
+Data prep: data needs to be converted into n5s or zarrs for training. 
+
+Download the data to your working directory. For Scott Lab at UoM e.g. (make sure you have the mflux token in your home directory):
+
+```bash
+unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/data /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/top_left_right_bottom_resliced_8555x5155x4419.raw
+```
+(Download takes ~10 minutes for 200GB)
+
+To process the volume run it on the HPC, e.g. with the following command:
+
+```bash
+srun --ntasks=1 --time=00:30:00 --mem-per-cpu=200G --cpus-per-task=1 --job-name="process_stitched" python3 scratch/process_stitched_vol.py
+```
+(Takes <20 minutes and ~180 GB of RAM on cascade)
+
+Once this is done you can use `scratch/reformat_dataset.py` to compute masks, sample points, etc. for the data.
 
 ### creating dacapo configs
 `--force` flag replaces the config in the mongodb with the new version.
