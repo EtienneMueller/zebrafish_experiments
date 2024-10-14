@@ -1,30 +1,30 @@
 # default paths to check for data
-input_container: /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/zebrafish.n5
-id_annotations_path: /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/id_annotations/{organelle}-{sample}-{annotation_type}.txt
-dataset_container: /nrs/funke/pattonw/data/zebrafish/zebrafish.n5
+input_container: /data/projects/punim2142/zebrafish_experiments/data/zebrafish.n5  # /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/zebrafish.n5
+id_annotations_path: /data/projects/punim2142/zebrafish_experiments/data/id_annotations/{organelle}-{sample}-{annotation_type}.txt  # /groups/mousebrainmicro/home/pattonw/Data/michelle_zebrafish/id_annotations/{organelle}-{sample}-{annotation_type}.txt
+dataset_container: /data/projects/punim2142/zebrafish_experiments/data/zebrafish_out.n5  # /nrs/funke/pattonw/data/zebrafish/zebrafish.n5
 data_group: "volumes/{sample}"
 raw_dataset: "volumes/{sample}/raw"
 gt_dataset: "volumes/{sample}/{organelle}"
 mask_dataset: "volumes/{sample}/{organelle}_mask"
 points_dataset: "volumes/{sample}/{organelle}_points"
-prediction_container: "/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5"
-sample_path: "/nrs/funke/adjavond/zebrafish/data"
+prediction_container: "/data/projects/punim2142/zebrafish_experiments/data/predictions/zebrafish.n5"  # "/nrs/funke/pattonw/predictions/zebrafish/zebrafish.n5"
+#sample_path: "/nrs/funke/adjavond/zebrafish/data"
 
 data_problems:
-    17-2:
+    '17-2':
         cells:
             id_mapping:
                 - [34, 0]
                 - [21, 0]
             mask_id: 81
-    8-1:
+    '8-1':
         axons:
             id_mapping:
                 - [8, 3]
             mask_id: 9
         cells:
             mask_id: 5
-    8-2:
+    '8-2':
         axons:
             id_mapping:
                 - [8, 6]

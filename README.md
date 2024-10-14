@@ -17,7 +17,7 @@ Update the `dacapo.yaml` file to point to your own mongodb and file storage path
 ├── runs  # logs from running training
 ```
 
-## installation
+## Installation
 
 create conda environment with `python >= 3.10` and install latest DaCapo
 
@@ -27,21 +27,29 @@ conda activate dacapo
 pip install dacapo-ml
 ```
 
-## usage
+## Usage
 use `--help` to get more info about script parameters
 
-### parsing spreadsheet
-
-Data prep: data needs to be converted into n5s or zarrs for training. 
+### Download the necessary data from MediaFlux
 
 Download the data to your working directory. For Scott Lab at UoM e.g. (make sure you have the mflux token in your home directory):
 
 ```bash
-unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/data /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/top_left_right_bottom_resliced_8555x5155x4419.raw
+unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/ /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/
 ```
-(Download takes ~10 minutes for 200GB)
 
-To process the volume run it on the HPC, e.g. with the following command:
+The folder contains:
+```
+├── id_annotations  # containing Michelle's annotations
+├── zebrafish.n5  # containing 8_1, 8_2, 16_bot, 17_2, 23_bot, 23_mid1
+├── top_left_right_bottom_resliced_8555x5155x4419.raw
+```
+
+(altogether ~225 GB, takes ~20 minutes to download)
+
+### 1. Process Stitched Vol
+
+Data prep: data needs to be converted into n5s or zarrs for training. E.g. to process the volume `top_left_right_bottom_resliced_8555x5155x4419.raw` run it on the HPC with the following command:
 
 ```bash
 srun --ntasks=1 --time=00:30:00 --mem-per-cpu=200G --cpus-per-task=1 --job-name="process_stitched" python3 scratch/process_stitched_vol.py
@@ -49,6 +57,24 @@ srun --ntasks=1 --time=00:30:00 --mem-per-cpu=200G --cpus-per-task=1 --job-name=
 (Takes <20 minutes and ~180 GB of RAM on cascade)
 
 Once this is done you can use `scratch/reformat_dataset.py` to compute masks, sample points, etc. for the data.
+
+### 2. Reformat Dataset
+
+Download the data from Mediaflux to the data folder:
+
+```bash
+zebrafish_experiments]$ unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/data /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/id_annotations
+```
+
+Reformating the dataset consists of four major part (in order to run):
+copy_data(), relabel(), merge_masks()/update_masks(), generate_points()
+
+```
+srun -p bigmem --ntasks=1 --time=00:30:00 --mem-per-cpu=256G --cpus-per-task=1 --job-name="reformat_dataset" python3 scratch/reformat_dataset.py --copy-data
+```
+
+
+
 
 ### creating dacapo configs
 `--force` flag replaces the config in the mongodb with the new version.

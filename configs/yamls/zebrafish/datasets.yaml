@@ -3,8 +3,8 @@ train:
   - 17-2
   - 8-1
   - 8-2
-  - 16_bot
-  - 23_bot
-  - 23_mid1
+  - 16-bot
+  - 23-bot
+  - 23-mid1
 validate:
   - 8-2

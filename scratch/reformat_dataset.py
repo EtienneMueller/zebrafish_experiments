@@ -1,13 +1,16 @@
+"""Script for converting the various training data into a consistent format for
+training. Requires a significant amount of RAM to Run"""
+import click
+import csv
+import itertools
+import logging
 import yaml
 import zarr
+
 import numpy as np
 
 from pathlib import Path
-import itertools
-import csv
 
-# Script for converting the various training data into a consistent
-# format for training. Requires a significant amount of RAM to Run
 
 # Load yamls
 yaml_root_dir = Path("configs/yamls/zebrafish")
@@ -32,55 +35,75 @@ id_annotations = yaml.safe_load(id_annotations_yaml.open("r").read())
 in_container = zarr.open(constants["input_container"])
 out_container = zarr.open(constants["dataset_container"])
 
+logger = logging.getLogger(__name__)
+
+
+def setup_logging(level):
+    logging.basicConfig(
+        format='%(asctime)s-[%(lineno)d]-%(levelname)s: %(message)s',
+        datefmt='%H:%M:%S',
+        level=level,
+    )
+    logger.debug("Logging is set to debug mode.")
+
 
 def copy_data(crop, index, organelle):
+    logging.debug(f"start copy_data. Crop {crop}, index {index}, organelle {organelle}")
+    
     raw = in_container[constants["raw_dataset"].format(sample=f"{crop}-{index}")][:]
     out_container[
         constants["raw_dataset"].format(sample=f"{crop}-{index}")
     ] = raw.astype(np.uint8)
 
     try:
+        logging.debug(f"try: check for gt_dataset")
         in_data = in_container[
             constants["gt_dataset"].format(
                 sample=f"{crop}-{index}", organelle=organelle
             )
         ][:]
     except KeyError as e:
+        logging.debug(f"except: KeyError")
         try:
+            logging.debug(f"try: check for gt_dataset, organelle 'all'")
             in_data = in_container[
                 constants["gt_dataset"].format(
                     sample=f"{crop}-{index}", organelle="all"
                 )
             ][:]
         except KeyError as e:
+            logging.debug(f"except: KeyError")
             # assume organelle not present in this crop
             in_data = np.zeros(raw.shape)
 
-    for bad_id, new_id in (
+    id_mapping = (
         constants["data_problems"]
-        .get(crop, {})
-        .get(index, {})
+        .get(f"{crop}-{index}", {})
         .get(organelle, {})
         .get("id_mapping", [])
-    ):
+    )
+    logging.debug(f"id_mapping: {id_mapping}")
+    for bad_id, new_id in (id_mapping):
         in_data[in_data == bad_id] = new_id
-
+    
     mask_id = (
         constants["data_problems"]
-        .get(crop, {})
-        .get(index, {})
+        .get(f"{crop}-{index}", {})
         .get(organelle, {})
         .get("mask_id", None)
     )
+    logging.debug(f"mask_id is {mask_id}")
+
     if mask_id is not None:
         in_mask = in_data != (
             constants["data_problems"]
-            .get(crop, {})
-            .get(index, {})
+            .get(f"{crop}-{index}", {})
             .get(organelle, {})
             .get("mask_id", -1)
         )
     else:
+        logging.debug(f"else: mask_id IS None")
+        logging.debug(f"in_data shape is {np.shape(in_data)}")
         in_mask = np.ones_like(in_data)
     in_data[in_mask == 0] = 0
 
@@ -252,62 +275,84 @@ def generate_points(sample: str, organelle: str):
     )
 
 
-RELABEL = True
-MERGE_MASKS = True
-COPY_DATA = True
-UPDATE_MASKS = True
-GENERATE_POINTS = True
+# RELABEL = True
+# MERGE_MASKS = True
+# COPY_DATA = True
+# UPDATE_MASKS = True
+# GENERATE_POINTS = True
 
-condition = lambda sample, organelle, annotation_type: (
-    organelle == "cells" and sample == "23_mid1"
-)
+@click.command()
+@click.option('--copy-data', 'copy_data_flag', is_flag=True, help='Copy data.')
+@click.option('--relabel', 'relabel_flag', is_flag=True, help='Relabel dataset.')
+@click.option('--merge-masks', 'merge_masks_flag', is_flag=True, help='Merge masks.')
+@click.option('--update-masks', 'update_masks_flag', is_flag=True, help='Ipdate masks.')
+@click.option('--generate-points', 'generate_points_flag', is_flag=True, help='generate points.')
+@click.option('--log-level', default='INFO', help='Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).')
+def main(copy_data_flag, relabel_flag, merge_masks_flag, update_masks_flag, generate_points_flag, log_level):
+    level = getattr(logging, log_level.upper(), logging.INFO)
+    setup_logging(level)
 
-if RELABEL:
-    for organelle, samples in id_annotations.items():
-        for sample, annotation_types in samples.items():
-            for annotation_type in annotation_types:
-                if not condition(sample, organelle, annotation_type):
+    # condition = lambda sample, organelle, annotation_type: (
+    #     organelle == "cells" and sample == "23_mid1"
+    # )
+    logging.info(f"Running copy_data: {copy_data_flag}")
+    logging.info(f"Running relabel: {relabel_flag}")
+    logging.info(f"Running merge_masks: {merge_masks_flag}")
+    logging.info(f"Running update_masks: {update_masks_flag}")
+    logging.info(f"Running generate_points: {generate_points_flag}")
+
+    if copy_data_flag:
+        for organelle in ["vessel", "axons", "cells"]:
+            for crop, index in [[8, 1], [8, 2]]:  #, [23, "bot"]]:
+                logging.info(f"COPYING DATA: {organelle}, {crop}, {index}")
+                copy_data(crop, index, organelle)
+        for crop, index in [[17, 2]]:  #, [16, "bot"]]:
+            logging.info(f"COPYING DATA: cells, {crop}, {index}")
+            copy_data(crop, index, "cells")
+
+    if relabel_flag:
+        for organelle, samples in id_annotations.items():
+            for sample, annotation_types in samples.items():
+                for annotation_type in annotation_types:
+                    if not condition(sample, organelle, annotation_type):
+                        continue
+                    relabel(organelle, sample, annotation_type)
+
+    if merge_masks_flag:
+        for organelle_a, organelle_b in itertools.combinations(id_annotations.keys(), 2):
+            organelle_a_samples = set(id_annotations[organelle_a].keys())
+            organelle_b_samples = set(id_annotations[organelle_b].keys())
+            for sample in organelle_a_samples.union(organelle_b_samples):
+                if not (
+                    condition(sample, organelle_a, None)
+                    or condition(sample, organelle_b, None)
+                ):
                     continue
-                relabel(organelle, sample, annotation_type)
+                merge_masks(organelle_a, organelle_b, sample)
 
-if MERGE_MASKS:
-    for organelle_a, organelle_b in itertools.combinations(id_annotations.keys(), 2):
-        organelle_a_samples = set(id_annotations[organelle_a].keys())
-        organelle_b_samples = set(id_annotations[organelle_b].keys())
-        for sample in organelle_a_samples.union(organelle_b_samples):
-            if not (
-                condition(sample, organelle_a, None)
-                or condition(sample, organelle_b, None)
-            ):
-                continue
-            merge_masks(organelle_a, organelle_b, sample)
-
-if COPY_DATA:
-    for organelle in targets:
+    if update_masks_flag:
         for crop, index in itertools.chain(datasets["train"], datasets["validate"]):
-            if not condition(None, organelle, None):
+            if not condition(None, None, None):
                 continue
-            copy_data(crop, index, organelle)
+            update_masks(crop, index, targets)
 
-if UPDATE_MASKS:
-    for crop, index in itertools.chain(datasets["train"], datasets["validate"]):
-        if not condition(None, None, None):
-            continue
-        update_masks(crop, index, targets)
+    if generate_points_flag:
+        for sample, organelle in itertools.product(
+            [
+                "16_bot",
+                "23_bot",
+                "23_mid1",
+            ],
+            [
+                "axons",
+                "cells",
+                "vessel",
+            ],
+        ):
+            if not condition(sample, organelle, None):
+                continue
+            generate_points(sample, organelle)
 
-if GENERATE_POINTS:
-    for sample, organelle in itertools.product(
-        [
-            "16_bot",
-            "23_bot",
-            "23_mid1",
-        ],
-        [
-            "axons",
-            "cells",
-            "vessel",
-        ],
-    ):
-        if not condition(sample, organelle, None):
-            continue
-        generate_points(sample, organelle)
+
+if __name__ == "__main__":
+    main()
