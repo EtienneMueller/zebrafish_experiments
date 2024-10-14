@@ -40,9 +40,10 @@ unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects
 
 The folder contains:
 ```
+├── cubes  # containing the cubes 16 bot and 23 bot
 ├── id_annotations  # containing Michelle's annotations
+├── synchrotron_raw  # containing top_left_right_bottom_resliced_8555x5155x4419.raw
 ├── zebrafish.n5  # containing 8_1, 8_2, 16_bot, 17_2, 23_bot, 23_mid1
-├── top_left_right_bottom_resliced_8555x5155x4419.raw
 ```
 
 (altogether ~225 GB, takes ~20 minutes to download)
