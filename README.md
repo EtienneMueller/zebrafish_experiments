@@ -63,7 +63,7 @@ Once this is done you can use `scratch/reformat_dataset.py` to compute masks, sa
 Download the data from Mediaflux to the data folder:
 
 ```bash
-zebrafish_experiments]$ unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/data /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/id_annotations
+unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/data /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/id_annotations
 ```
 
 Reformating the dataset consists of four major part (in order to run):
