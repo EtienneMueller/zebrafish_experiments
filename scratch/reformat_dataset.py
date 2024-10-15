@@ -48,7 +48,7 @@ def setup_logging(level):
 
 
 def copy_data(crop, index, organelle):
-    logging.debug(f"start copy_data. Crop {crop}, index {index}, organelle {organelle}")
+    logging.info(f"COPY_DATA: {crop = }; {index = }; {organelle = }")
     
     raw = in_container[constants["raw_dataset"].format(sample=f"{crop}-{index}")][:]
     out_container[
@@ -82,7 +82,7 @@ def copy_data(crop, index, organelle):
         .get(organelle, {})
         .get("id_mapping", [])
     )
-    logging.debug(f"id_mapping: {id_mapping}")
+    logging.debug(f"{id_mapping = }")
     for bad_id, new_id in (id_mapping):
         in_data[in_data == bad_id] = new_id
     
@@ -92,7 +92,7 @@ def copy_data(crop, index, organelle):
         .get(organelle, {})
         .get("mask_id", None)
     )
-    logging.debug(f"mask_id is {mask_id}")
+    logging.debug(f"{mask_id = }")
 
     if mask_id is not None:
         in_mask = in_data != (
@@ -275,12 +275,6 @@ def generate_points(sample: str, organelle: str):
     )
 
 
-# RELABEL = True
-# MERGE_MASKS = True
-# COPY_DATA = True
-# UPDATE_MASKS = True
-# GENERATE_POINTS = True
-
 @click.command()
 @click.option('--copy-data', 'copy_data_flag', is_flag=True, help='Copy data.')
 @click.option('--relabel', 'relabel_flag', is_flag=True, help='Relabel dataset.')
@@ -302,13 +296,12 @@ def main(copy_data_flag, relabel_flag, merge_masks_flag, update_masks_flag, gene
     logging.info(f"Running generate_points: {generate_points_flag}")
 
     if copy_data_flag:
-        for organelle in ["vessel", "axons", "cells"]:
-            for crop, index in [[8, 1], [8, 2]]:  #, [23, "bot"]]:
-                logging.info(f"COPYING DATA: {organelle}, {crop}, {index}")
-                copy_data(crop, index, organelle)
-        for crop, index in [[17, 2]]:  #, [16, "bot"]]:
-            logging.info(f"COPYING DATA: cells, {crop}, {index}")
+        for crop, index in [[8, 1], [8, 2], [17, 2]]:  #, [16, "bot"], [23, "mid1"]]:
             copy_data(crop, index, "cells")
+        for organelle in ["vessel", "axons"]:
+            for crop, index in [[8, 1], [8, 2]]:  #, [23, "bot"]]:
+                copy_data(crop, index, organelle)
+
 
     if relabel_flag:
         for organelle, samples in id_annotations.items():
