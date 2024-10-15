@@ -32,11 +32,7 @@ use `--help` to get more info about script parameters
 
 ### Download the necessary data from MediaFlux
 
-Download the data to your working directory. For Scott Lab at UoM e.g. (make sure you have the mflux token in your home directory):
-
-```bash
-unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/ /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/
-```
+Download the data to your working directory. For Scott Lab at UoM copy `/projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/`.
 
 The folder contains:
 ```
@@ -50,12 +46,7 @@ The folder contains:
 
 ### 1. Process Stitched Vol
 
-Data prep: data needs to be converted into n5s or zarrs for training. E.g. to process the volume `top_left_right_bottom_resliced_8555x5155x4419.raw` run it on the HPC with the following command:
-
-```bash
-srun --ntasks=1 --time=00:30:00 --mem-per-cpu=200G --cpus-per-task=1 --job-name="process_stitched" python3 scratch/process_stitched_vol.py
-```
-(Takes <20 minutes and ~180 GB of RAM on cascade)
+Data prep: data needs to be converted into n5s or zarrs for training. E.g. to process the volume `top_left_right_bottom_resliced_8555x5155x4419.raw` edit it in `scratch/process_stitched_vol.py` and run it on the HPC (Takes <20 minutes and ~180 GB of RAM on cascade).
 
 Once this is done you can use `scratch/reformat_dataset.py` to compute masks, sample points, etc. for the data.
 
