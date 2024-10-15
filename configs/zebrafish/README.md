@@ -1,1 +1,0 @@
-These are auto generated yamls of the most up to date configs
