@@ -52,20 +52,8 @@ Once this is done you can use `scratch/reformat_dataset.py` to compute masks, sa
 
 ### 2. Reformat Dataset
 
-Download the data from Mediaflux to the data folder:
-
-```bash
-unimelb-mf-download --overwrite --csum-check --nb-workers 4 --out /data/projects/punim2142/zebrafish_experiments/data /projects/proj-5160_scott_lab-1128.4.503/2023_AUTOSEG/data/id_annotations
-```
-
 Reformating the dataset consists of four major part (in order to run):
 copy_data(), relabel(), merge_masks()/update_masks(), generate_points()
-
-```
-srun -p bigmem --ntasks=1 --time=00:30:00 --mem-per-cpu=256G --cpus-per-task=1 --job-name="reformat_dataset" python3 scratch/reformat_dataset.py --copy-data
-```
-
-
 
 
 ### creating dacapo configs
